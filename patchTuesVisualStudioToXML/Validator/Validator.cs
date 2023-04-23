@@ -13,7 +13,7 @@ namespace patchTuesVisualStudioToXML.Validator
         /// <param name="schemaURI">The URL that specifies the schema to load.</param>
         /// <param name="nameOfXMLfile">Name of XML file in the root directory</param>
         /// <returns>Return boolean answer can XML file validate on XSD schema</returns>
-        static internal bool XMLISValidated(string schemaTargetNameSpace = "http://oval.mitre.org/XMLSchema/oval-common-5", string schemaURI = "Validator/oval-common-schema.xsd", string nameOfXMLfile = "oval_ru.altx-soft.win_def_89847.xml")
+        static internal bool XMLISValidated(string schemaTargetNameSpace = "http://oval.mitre.org/XMLSchema/oval-common-5", string schemaURI = "Validator/oval-common-schema.xsd", string nameOfXMLfile = "sample.xml")
         {
             XmlSchemaSet schemas = new XmlSchemaSet();
             schemas.Add(schemaTargetNameSpace, schemaURI);
