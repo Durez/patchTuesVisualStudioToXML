@@ -37,4 +37,16 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 		[XmlElement(ElementName = "Branch")]
 		public List<Branch> Branchs { get; set; }
 	}
+
+	[XmlRoot(ElementName = "ProductTree")]
+	public class ProductTree
+	{
+
+		[XmlElement(ElementName = "Branch")]
+		public Branch Branch { get; set; }
+
+		[XmlElement(ElementName = "FullProductName")]
+		public List<FullProductName> FullProductNames { get; set; }
+	}
+
 }

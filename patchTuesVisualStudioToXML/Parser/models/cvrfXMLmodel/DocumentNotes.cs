@@ -7,26 +7,6 @@ using System.Xml.Serialization;
 
 namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 {
-	[XmlRoot(ElementName = "Note")]
-	public class Note
-	{
-
-		[XmlAttribute(AttributeName = "Title")]
-		public string Title { get; set; }
-
-		[XmlAttribute(AttributeName = "Audience")]
-		public string Audience { get; set; }
-
-		[XmlAttribute(AttributeName = "Type")]
-		public string Type { get; set; }
-
-		[XmlAttribute(AttributeName = "Ordinal")]
-		public int Ordinal { get; set; }
-
-		[XmlText]
-		public string Text { get; set; }
-	}
-
 	[XmlRoot(ElementName = "DocumentNotes")]
 	public class DocumentNotes
 	{

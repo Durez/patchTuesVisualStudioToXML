@@ -18,27 +18,6 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 		public DateTime Alias { get; set; }
 	}
 
-	[XmlRoot(ElementName = "Revision")]
-	public class Revision
-	{
-
-		[XmlElement(ElementName = "Number")]
-		public int Number { get; set; }
-
-		[XmlElement(ElementName = "Date")]
-		public DateTime Date { get; set; }
-
-		[XmlElement(ElementName = "Description")]
-		public string Description { get; set; }
-	}
-
-	[XmlRoot(ElementName = "RevisionHistory")]
-	public class RevisionHistory
-	{
-
-		[XmlElement(ElementName = "Revision")]
-		public List<Revision> Revision { get; set; }
-	}
 
 	[XmlRoot(ElementName = "DocumentTracking")]
 	public class DocumentTracking
