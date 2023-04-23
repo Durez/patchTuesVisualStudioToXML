@@ -26,10 +26,10 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 		[XmlElement(ElementName = "DocumentNotes")]
 		public DocumentNotes DocumentNotes { get; set; }
 
-		[XmlElement(ElementName = "ProductTree")]
+		[XmlElement(ElementName = "ProductTree", Namespace = "http://www.icasi.org/CVRF/schema/prod/1.1")]
 		public ProductTree ProductTree { get; set; }
 
-		[XmlElement(ElementName = "Vulnerability")]
+		[XmlElement(ElementName = "Vulnerability", Namespace = "http://www.icasi.org/CVRF/schema/vuln/1.1")]
 		public List<Vulnerability> VulnerabilitiesList { get; set; }
 
 		[XmlAttribute(AttributeName = "cpe-lang", Namespace = "http://cpe.mitre.org/language/2.0")]

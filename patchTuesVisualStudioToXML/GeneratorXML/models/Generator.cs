@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace patchTuesVisualStudioToXML.Generator.models
+namespace patchTuesVisualStudioToXML.GeneratorXML.models
 {
 	[XmlRoot(ElementName = "generator")]
-	public class Generator
+	public class GeneratorTAG
 	{
 
 		[XmlElement(ElementName = "product_name", Namespace = "http://oval.mitre.org/XMLSchema/oval-common-5")]

@@ -5,16 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace patchTuesVisualStudioToXML.Generator.models
+namespace patchTuesVisualStudioToXML.GeneratorXML.models
 {
 
-	[System.SerializableAttribute()]
 	[XmlRoot(ElementName = "oval_definitions", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5")]
-	public class oval_definitions
+	public class Oval_definitions
 	{
 
 		[XmlElement(ElementName = "generator")]
-		public Generator generator { get; set; }
+		public GeneratorTAG generator { get; set; }
 
 		[XmlElement(ElementName = "variables")]
 		public variables variables { get; set; }
@@ -26,7 +25,7 @@ namespace patchTuesVisualStudioToXML.Generator.models
 		public objects objects { get; set; }
 
 		[XmlElement(ElementName = "definitions")]
-		public definitions definitions { get; set; }
+		public Definitions definitions { get; set; }
 
 		[XmlElement(ElementName = "tests")]
 		public tests tests { get; set; }

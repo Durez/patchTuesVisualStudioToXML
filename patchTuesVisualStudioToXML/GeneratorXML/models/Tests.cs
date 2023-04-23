@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace patchTuesVisualStudioToXML.Generator.models
+namespace patchTuesVisualStudioToXML.GeneratorXML.models
 {
 	[XmlRoot(ElementName = "object")]
 	public class @object
