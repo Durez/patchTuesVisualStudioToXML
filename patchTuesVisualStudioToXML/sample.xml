@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<oval_definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-definitions-5 oval-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#windows windows-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#independent independent-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#linux linux-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#unix unix-definitions-schema.xsd" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5">
+  <generator>
+    <oval:product_name>OVALdb generator</oval:product_name>
+    <oval:schema_version>5.10.1</oval:schema_version>
+    <oval:timestamp>2023-04-20T12:28:29</oval:timestamp>
+  </generator>
+  <definitions>
+    <definition class="vulnerability" id="oval:ru.altx-soft.win:def:89847" version="1">
+      <metadata>
+        <title>Уязвимость повышения привилегий в установщике Git для Windows (CVE-2023-22743)</title>
+        <affected family="windows">
+          <platform>Microsoft Windows 7</platform>
+          <platform>Microsoft Windows 8.1</platform>
+          <platform>Microsoft Windows 10</platform>
+          <platform>Microsoft Windows 11</platform>
+          <platform>Microsoft Windows Server 2008</platform>
+          <platform>Microsoft Windows Server 2008 R2</platform>
+          <platform>Microsoft Windows Server 2012</platform>
+          <platform>Microsoft Windows Server 2012 R2</platform>
+          <platform>Microsoft Windows Server 2016</platform>
+          <platform>Microsoft Windows Server 2019</platform>
+          <platform>Microsoft Windows Server 2022</platform>
+          <product>Microsoft Visual Studio 2017</product>
+          <product>Microsoft Visual Studio 2019</product>
+          <product>Microsoft Visual Studio 2022</product>
+        </affected>
+        <reference source="Microsoft" ref_id="CVE-2023-22743" ref_url="https://msrc.microsoft.com/update-guide/vulnerability/CVE-2023-22743" />
+        <reference source="CVE" ref_id="CVE-2023-22743" ref_url="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-22743" />
+        <description>Уязвимость повышения привилегий в установщике Git для Windows.</description>
+      </metadata>
+      <criteria operator="OR">
+        <criteria comment="VS 2022">
+          <extend_definition comment="Microsoft Visual Studio 2022 is installed" definition_ref="oval:ru.altx-soft.win:def:80764" />
+          <criteria operator="OR" comment="Vulnerable versions">
+            <criterion comment="Check if the version of Visual Studio is greater than or equal 17.0 and less than 17.0.20" test_ref="oval:ru.altx-soft.win:tst:97065" />
+            <criterion comment="Check if the version of Visual Studio is greater than or equal 17.2 and less than 17.2.14" test_ref="oval:ru.altx-soft.win:tst:97066" />
+            <criterion comment="Check if the version of Visual Studio is greater than or equal 17.4 and less than 17.4.6" test_ref="oval:ru.altx-soft.win:tst:97067" />
+            <criterion comment="Check if the version of Visual Studio is greater than or equal 17.5.0 and less than 17.5.2" test_ref="oval:ru.altx-soft.win:tst:97064" />
+          </criteria>
+        </criteria>
+        <criteria comment="VS 2019">
+          <extend_definition comment="Microsoft Visual Studio 2019 is installed" definition_ref="oval:ru.altx-soft.win:def:62605" />
+            <criterion comment="Check if the version of Visual Studio is greater than or equal 16.0 and less than 16.11.25" test_ref="oval:ru.altx-soft.win:tst:97068" />
+        </criteria>
+        <criteria comment="VS 2017">
+          <extend_definition comment="Microsoft Visual Studio 2017 is installed" definition_ref="oval:ru.altx-soft.win:def:30410" />
+          <criterion comment="Check if the version of devenv.exe is greater than or equal 15.0.26228.4 and less than 15.9.33423.255" test_ref="oval:ru.altx-soft.win:tst:97069" />
+        </criteria>
+      </criteria>
+    </definition>
+  </definitions>
+  <tests>
+   
+  </tests>
+  <objects>
+    
+  </objects>
+  <states>
+    
+  </states>
+  <variables>
+    
+  </variables>
+</oval_definitions>
