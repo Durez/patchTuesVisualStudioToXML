@@ -7,23 +7,23 @@ using System.Xml.Serialization;
 
 namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 {
-	[XmlRoot(ElementName = "FullProductName")]
+	[XmlRoot(ElementName = "FullProductName", Namespace = "http://www.icasi.org/CVRF/schema/prod/1.1")]
 	public class FullProductName
 	{
 
 		[XmlAttribute(AttributeName = "ProductID")]
-		public int ProductID { get; set; }
+		public string ProductID { get; set; }
 
 		[XmlText]
 		public string Text { get; set; }
 	}
 
-	[XmlRoot(ElementName = "Branch")]
+	[XmlRoot(ElementName = "Branch", Namespace = "http://www.icasi.org/CVRF/schema/prod/1.1")]
 	public class Branch
 	{
 
-		[XmlElement(ElementName = "FullProductName")]
-		public List<FullProductName> FullProductName { get; set; }
+		[XmlElement(ElementName = "FullProductName", Namespace = "http://www.icasi.org/CVRF/schema/prod/1.1")]
+		public List<FullProductName> FullProductNamesList { get; set; }
 
 		[XmlAttribute(AttributeName = "Type")]
 		public string Type { get; set; }
@@ -34,19 +34,20 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 		[XmlText]
 		public string Text { get; set; }
 
-		[XmlElement(ElementName = "Branch")]
-		public List<Branch> Branchs { get; set; }
+		[XmlElement(ElementName = "Branch", Namespace = "http://www.icasi.org/CVRF/schema/prod/1.1")]
+		public List<Branch> BranchsList { get; set; }
 	}
 
-	[XmlRoot(ElementName = "ProductTree")]
+
+	[XmlRoot(ElementName = "ProductTree", Namespace = "http://www.icasi.org/CVRF/schema/prod/1.1")]
 	public class ProductTree
 	{
 
-		[XmlElement(ElementName = "Branch")]
+		[XmlElement(ElementName = "Branch", Namespace = "http://www.icasi.org/CVRF/schema/prod/1.1")]
 		public Branch Branch { get; set; }
 
-		[XmlElement(ElementName = "FullProductName")]
-		public List<FullProductName> FullProductNames { get; set; }
+		[XmlElement(ElementName = "FullProductName", Namespace = "http://www.icasi.org/CVRF/schema/prod/1.1")]
+		public List<FullProductName> FullProductNamesList { get; set; }
 	}
 
 }

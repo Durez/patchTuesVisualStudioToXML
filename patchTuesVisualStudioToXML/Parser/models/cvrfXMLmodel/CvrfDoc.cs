@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 {
-	[XmlRoot(ElementName = "cvrfdoc")]
+	[XmlRoot(ElementName = "cvrfdoc", Namespace = "http://www.icasi.org/CVRF/schema/cvrf/1.1")]
 	public class Cvrfdoc
 	{
 
@@ -30,33 +30,33 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 		public ProductTree ProductTree { get; set; }
 
 		[XmlElement(ElementName = "Vulnerability")]
-		public List<Vulnerability> Vulnerability { get; set; }
+		public List<Vulnerability> VulnerabilitiesList { get; set; }
 
-		[XmlAttribute(AttributeName = "cpe-lang")]
+		[XmlAttribute(AttributeName = "cpe-lang", Namespace = "http://cpe.mitre.org/language/2.0")]
 		public string CpeLang { get; set; }
 
-		[XmlAttribute(AttributeName = "scap-core")]
+		[XmlAttribute(AttributeName = "scap-core", Namespace = "https://scap.nist.gov/schema/scap-core/1.0")]
 		public string ScapCore { get; set; }
 
-		[XmlAttribute(AttributeName = "cvrf-common")]
+		[XmlAttribute(AttributeName = "cvrf-common", Namespace = "http://www.icasi.org/CVRF/schema/common/1.1")]
 		public string CvrfCommon { get; set; }
 
-		[XmlAttribute(AttributeName = "dc")]
+		[XmlAttribute(AttributeName = "dc", Namespace = "http://purl.org/dc/elements/1.1/")]
 		public string Dc { get; set; }
 
-		[XmlAttribute(AttributeName = "prod")]
+		[XmlAttribute(AttributeName = "prod", Namespace = "http://www.icasi.org/CVRF/schema/prod/1.1")]
 		public string Prod { get; set; }
 
-		[XmlAttribute(AttributeName = "cvssv2")]
+		[XmlAttribute(AttributeName = "cvssv2", Namespace = "https://scap.nist.gov/schema/cvss-v2/1.0")]
 		public string Cvssv2 { get; set; }
 
-		[XmlAttribute(AttributeName = "vuln")]
+		[XmlAttribute(AttributeName = "vuln", Namespace = "http://www.icasi.org/CVRF/schema/vuln/1.1")]
 		public string Vuln { get; set; }
 
-		[XmlAttribute(AttributeName = "sch")]
+		[XmlAttribute(AttributeName = "sch", Namespace = "http://purl.oclc.org/dsdl/schematron")]
 		public string Sch { get; set; }
 
-		[XmlAttribute(AttributeName = "cvrf")]
+		[XmlAttribute(AttributeName = "cvrf", Namespace = "http://www.icasi.org/CVRF/schema/cvrf/1.1")]
 		public string Cvrf { get; set; }
 
 		[XmlText]

@@ -12,10 +12,10 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 	{
 
 		[XmlElement(ElementName = "Number")]
-		public int Number { get; set; }
+		public string Number { get; set; }
 
 		[XmlElement(ElementName = "Date")]
-		public DateTime Date { get; set; }
+		public string Date { get; set; }
 
 		[XmlElement(ElementName = "Description")]
 		public string Description { get; set; }

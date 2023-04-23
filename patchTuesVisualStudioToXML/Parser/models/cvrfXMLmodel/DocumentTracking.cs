@@ -12,10 +12,10 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 	{
 
 		[XmlElement(ElementName = "ID")]
-		public DateTime ID { get; set; }
+		public string ID { get; set; }
 
 		[XmlElement(ElementName = "Alias")]
-		public DateTime Alias { get; set; }
+		public string Alias { get; set; }
 	}
 
 
@@ -36,9 +36,9 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 		public RevisionHistory RevisionHistory { get; set; }
 
 		[XmlElement(ElementName = "InitialReleaseDate")]
-		public DateTime InitialReleaseDate { get; set; }
+		public string InitialReleaseDate { get; set; }
 
 		[XmlElement(ElementName = "CurrentReleaseDate")]
-		public DateTime CurrentReleaseDate { get; set; }
+		public string CurrentReleaseDate { get; set; }
 	}
 }

@@ -21,7 +21,7 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 		public string Type { get; set; }
 
 		[XmlAttribute(AttributeName = "Ordinal")]
-		public int Ordinal { get; set; }
+		public string Ordinal { get; set; }
 
 		[XmlText]
 		public string Text { get; set; }

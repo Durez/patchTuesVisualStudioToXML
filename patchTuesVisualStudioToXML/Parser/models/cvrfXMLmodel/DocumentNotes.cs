@@ -12,6 +12,6 @@ namespace patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel
 	{
 
 		[XmlElement(ElementName = "Note")]
-		public List<Note> Note { get; set; }
+		public List<Note> NotesList { get; set; }
 	}
 }
