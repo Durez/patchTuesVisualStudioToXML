@@ -108,7 +108,28 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlElement(ElementName = "name")]
 		public string name { get; set; }
-	}
+
+        public RegistryObject()
+        {
+
+        }
+
+        public RegistryObject(string id, string comment, Behaviors behaviors, string hive, KeyTAG key, string name, string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", string namespace1 = "http://oval.mitre.org/XMLSchema/oval-definitions-5", string version = "1", SetTAG? set = null, string? text = null)
+        {
+            this.xmlns = xmlns;
+            this.ns1 = namespace1;
+            this.id = id;
+            this.version = version;
+            this.comment = comment;
+			if (text != null) this.text = text;
+            this.hive = hive;
+            this.name = name;
+
+            this.key = key;
+            this.behaviors = behaviors;
+            if (set != null) this.set = set;
+        }
+    }
 
 	[XmlRoot(ElementName = "behaviors")]
 	public class Behaviors
@@ -116,7 +137,15 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlAttribute(AttributeName = "windows_view")]
 		public string windowsView { get; set; }
-	}
+        public Behaviors()
+        {
+
+        }
+        public Behaviors(string windowsView)
+        {
+            this.windowsView = windowsView;
+        }
+    }
 
 	[XmlRoot(ElementName = "key")]
 	public class KeyTAG
@@ -127,7 +156,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlAttribute(AttributeName = "var_check")]
 		public string varCheck { get; set; }
-	}
+
+        public KeyTAG(string varRef, string varCheck)
+        {
+            this.varRef = varRef;
+            this.varCheck = varCheck;
+        }
+    }
 
 	[XmlRoot(ElementName = "objects")]
 	public class Objects

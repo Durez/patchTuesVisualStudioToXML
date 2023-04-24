@@ -92,7 +92,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlAttribute(AttributeName = "test_ref")]
 		public string testRef { get; set; }
-	}
+
+        public Criterion(string comment, string testRef)
+        {
+            this.comment = comment;
+            this.testRef = testRef;
+        }
+    }
 
 	[XmlRoot(ElementName = "criteria")]
 	public class Criteria

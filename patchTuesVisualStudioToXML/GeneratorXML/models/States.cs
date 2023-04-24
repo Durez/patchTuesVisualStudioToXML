@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace patchTuesVisualStudioToXML.GeneratorXML.models
 {
 	[XmlRoot(ElementName = "value")]
-	public class value
+	public class ValueTAG
 	{
 		//TODO datatype and operation
 		[XmlAttribute(AttributeName = "operation")]
@@ -19,14 +19,21 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlText]
 		public string text { get; set; }
-	}
+
+        public ValueTAG(string operation, string datatype, string text)
+        {
+            this.operation = operation;
+            this.datatype = datatype;
+            this.text = text;
+        }
+    }
 
 	[XmlRoot(ElementName = "registry_state")]
-	public class registry_state
+	public class RegistryState
 	{
 
 		[XmlElement(ElementName = "value")]
-		public value value { get; set; }
+		public ValueTAG value { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
 		public string xmlns { get; set; }
@@ -42,10 +49,20 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlText]
 		public string text { get; set; }
-	}
+
+        public RegistryState(ValueTAG value, string xmlns, string id, string version, string comment, string? text = null)
+        {
+            this.value = value;
+            this.xmlns = xmlns;
+            this.id = id;
+            this.version = version;
+            this.comment = comment;
+            if (text != null) this.text = text;
+        }
+    }
 
 	[XmlRoot(ElementName = "version")]
-	public class version
+	public class VersionTAG
 	{
 
 		[XmlAttribute(AttributeName = "datatype")]
@@ -59,11 +76,11 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	}
 
 	[XmlRoot(ElementName = "file_state")]
-	public class file_state
+	public class FileStateTAG
 	{
 
 		[XmlElement(ElementName = "version")]
-		public List<version> version { get; set; }
+		public List<VersionTAG> version { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
 		public string xmlns { get; set; }
@@ -82,14 +99,24 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	}
 
 	[XmlRoot(ElementName = "states")]
-	public class states
+	public class States
 	{
 
 		[XmlElement(ElementName = "registry_state")]
-		public List<registry_state> registry_state { get; set; }
+		public List<RegistryState> registryState { get; set; }
 
 		[XmlElement(ElementName = "file_state")]
-		public List<file_state> file_state { get; set; }
-	}
+		public List<FileStateTAG> fileState { get; set; }
+        public States()
+        {
+
+        }
+
+        public States(List<RegistryState> registryState, List<FileStateTAG> fileState)
+        {
+            this.registryState = registryState;
+            this.fileState = fileState;
+        }
+    }
 
 }

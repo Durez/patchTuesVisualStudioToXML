@@ -16,7 +16,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlAttribute(AttributeName = "object_ref")]
 		public string objectRef { get; set; }
-	}
+
+        public ObjectComponent(string itemField, string objectRef)
+        {
+            this.itemField = itemField;
+            this.objectRef = objectRef;
+        }
+    }
 
 	[XmlRoot(ElementName = "concat")]
 	public class Concat
@@ -53,7 +59,18 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlElement(ElementName = "object_component")]
 		public ObjectComponent objectComponent { get; set; }
-	}
+
+        public LocalVariable( string id, string version, string comment, string datatype, ObjectComponent objectComponent, Concat? concat = null, string? text = null)
+        {
+            if (concat != null) this.concat = concat;
+            this.id = id;
+            this.version = version;
+            this.comment = comment;
+            this.datatype = datatype;
+			if (text != null)  this.text = text;
+            this.objectComponent = objectComponent;
+        }
+    }
 
 	[XmlRoot(ElementName = "variables")]
 	public class Variables

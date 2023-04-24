@@ -13,7 +13,15 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlAttribute(AttributeName = "object_ref")]
 		public string objectRef { get; set; }
-	}
+        public ObjectTAG()
+        {
+
+        }
+        public ObjectTAG(string objectRef)
+        {
+            this.objectRef = objectRef;
+        }
+    }
 
 	[XmlRoot(ElementName = "state")]
 	public class State
@@ -21,7 +29,12 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlAttribute(AttributeName = "state_ref")]
 		public string stateRef { get; set; }
-	}
+        
+		public State(string stateRef)
+        {
+            this.stateRef = stateRef;
+        }
+    }
 
 	[XmlRoot(ElementName = "registry_test")]
 	public class RegistryTest
@@ -50,6 +63,23 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlAttribute(AttributeName = "check")]
 		public string check { get; set; }
+        
+		public RegistryTest()
+        {
+
+        }
+		public RegistryTest(string id, string comment, List<State> states, ObjectTAG objectRef, string checkExistence = "at_least_one_exists", string check = "all", string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", string version = "1")
+        {
+			this.id = id;
+			this.xmlns = xmlns;
+			this.comment = comment;
+			this.version = version;
+			this.checkExistence = checkExistence;
+			this.check = check;
+
+			this.states = states;
+			this.objectTag = objectRef;
+		}
 	}
 
 	[XmlRoot(ElementName = "file_test")]

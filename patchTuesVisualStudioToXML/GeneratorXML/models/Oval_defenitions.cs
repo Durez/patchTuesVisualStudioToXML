@@ -19,7 +19,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public Variables variables { get; set; }
 
 		[XmlElement(ElementName = "states")]
-		public states states { get; set; }
+		public States states { get; set; }
 
 		[XmlElement(ElementName = "objects")]
 		public Objects objects { get; set; }
