@@ -19,7 +19,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlText]
 		public string text { get; set; }
+        public ValueTAG()
+        {
 
+        }
         public ValueTAG(string operation, string datatype, string text)
         {
             this.operation = operation;
@@ -28,7 +31,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
         }
     }
 
-	[XmlRoot(ElementName = "registry_state")]
+	[XmlRoot(ElementName = "registry_state", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
 	public class RegistryState
 	{
 
@@ -49,7 +52,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlText]
 		public string text { get; set; }
+        public RegistryState()
+        {
 
+        }
         public RegistryState(ValueTAG value, string xmlns, string id, string version, string comment, string? text = null)
         {
             this.value = value;
@@ -58,6 +64,14 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
             this.version = version;
             this.comment = comment;
             if (text != null) this.text = text;
+        }
+
+        public RegistryState(string id, string comment, string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")
+        {
+			this.id = id;
+			this.xmlns = xmlns;
+			this.version = "1";
+			this.comment = comment;
         }
     }
 

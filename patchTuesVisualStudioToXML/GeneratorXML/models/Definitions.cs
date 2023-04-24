@@ -14,9 +14,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public List<Definition> definitionsList { get; set; }
         public Definitions()
         {
-			definitionsList = new List<Definition>();
 
-		}
+        }
 	}
 
 	[XmlRoot(ElementName = "affected")]
@@ -68,8 +67,9 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public string description { get; set; }
         public MetadataTAG()
         {
-			referencesList = new List<Reference>();
-		}
+
+        }
+
 	}
 
 	[XmlRoot(ElementName = "extend_definition")]
@@ -92,11 +92,15 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlAttribute(AttributeName = "test_ref")]
 		public string testRef { get; set; }
+        public Criterion()
+        {
+				
+        }
 
-        public Criterion(string comment, string testRef)
+        public Criterion(string id, string comment)
         {
             this.comment = comment;
-            this.testRef = testRef;
+            this.testRef = id;
         }
     }
 

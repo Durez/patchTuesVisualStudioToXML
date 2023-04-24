@@ -13,30 +13,46 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
     public class GeneratorXMLData
     {
         private const string schemaVersion = "5.11";
+        private const string rawIDstring = "oval:en.ovalxmlgen.win";
+        private const string objectRawStrID = rawIDstring + ":obj:";
+        private const string definitionRawStrID = rawIDstring + ":def:";
+        private const string testRawStrID = rawIDstring + ":tst:";
+        private const string stateRawStrID = rawIDstring + ":ste:";
+        private const string variableRawStrID = rawIDstring + ":var:";
+
         private static readonly List<string> platformsConst = new List<string>()
                     { "Microsoft Windows 7", "Microsoft Windows 8.1", "Microsoft Windows 10", "Microsoft Windows 11",
                         "Microsoft Windows Server 2008", "Microsoft Windows Server 2008 R2", "Microsoft Windows Server 2012",
                         "Microsoft Windows Server 2012 R2", "Microsoft Windows Server 2016", "Microsoft Windows Server 2019"};
         private int lastDefID = 11111;
-        private int lastTestID = 22222;
+        private int lastRegistryTestID = 22222;
+        private int lastRegistryObjID = 1;
         private int lastDefrefID = 77777;
         private int lastObjID = 55555;
         private int lastStateID = 33333;
         private int lastVarID = 44444;
-        private XmlSerializer serializer = new XmlSerializer(typeof(Oval_definitions));
+        
         private Cvrfdoc cvrfdoc {get;}
-        public Oval_definitions resultOVALXML { get; set; }
+        public OvalDefinitions resultOVALXML { get; set; }
         public GeneratorXMLData()
         {
-            resultOVALXML = LoadSample();
+
         }
-        public void GenerateXMLData(Cvrfdoc cvrfdoc)
+        public GeneratorXMLData(OvalDefinitions sampleDoc)
+        {
+            resultOVALXML = sampleDoc;
+        }
+        public OvalDefinitions GenerateXMLData(Cvrfdoc cvrfdoc)
         {
             resultOVALXML.generator = new GeneratorTAG(schemaVersion, "OVALXMLgen by AGA");
 
             List<Vulnerability> VulnerabListFiltredByProj = GetVulnerabilities(cvrfdoc);
 
             resultOVALXML.tests.registryTest = new List<RegistryTest>();
+            resultOVALXML.objects.registryObject = new List<RegistryObject>();
+
+            //create uninstall registry object
+            resultOVALXML.objects.registryObject.Add(CreateUninstallRegistryObject());
 
             //tag defenitions
             resultOVALXML.definitions.definitionsList = new List<Definition>();
@@ -48,41 +64,37 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                 //root of def
                 Definition definition = new Definition();
                 definition.@class = "vulnerability";
-                definition.id = "oval:en.ovalxmlgen.win:def:" + lastDefID.ToString();
+                definition.id = definitionRawStrID + lastDefID.ToString();
                 definition.version = "1";
-
 
                 //tag metadata
                 List<string> products = new List<string>();
                 //different prodID:years of versions VS
                 Dictionary<string,string> visualStudioProdIDYearPairs = new Dictionary<string, string>();
-                foreach (var branch in cvrfdoc.ProductTree.Branch.BranchsList)
+                foreach (var branch in from branch in cvrfdoc.ProductTree.Branch.BranchsList
+                                       where branch.Name == "Developer Tools"
+                                       select branch)
                 {
-                    if (branch.Name == "Developer Tools")
+                    foreach (var productID in vulnerability.ProductStatuses.Status.ProductIDsList)
                     {
-                        foreach (var productID in vulnerability.ProductStatuses.Status.ProductIDsList)
+                        foreach (var (fullProductName, indexOfYear, nameOfProduct) in from fullProductName in branch.FullProductNamesList
+                                                                                      where fullProductName.ProductID == productID
+                                                                                      let indexOfYear = fullProductName.Text.IndexOf("Microsoft Visual Studio ") + 24
+                                                                                      let nameOfProduct = "Microsoft Visual Studio " + fullProductName.Text.Substring(indexOfYear, 4)
+                                                                                      select (fullProductName, indexOfYear, nameOfProduct))
                         {
-                            
-                            
-                            
-                            foreach (var fullProductName in branch.FullProductNamesList)
+                            if (!products.Contains(nameOfProduct))
                             {
-                                if (fullProductName.ProductID == productID)
-                                {
-                                    int indexOfYear = fullProductName.Text.IndexOf("Microsoft Visual Studio ") + 24;
-                                    string nameOfProduct = "Microsoft Visual Studio " + fullProductName.Text.Substring(indexOfYear, 4);
-                                    if (!products.Contains(nameOfProduct)) 
-                                    {
-                                        products.Add(nameOfProduct);
-                                        visualStudioProdIDYearPairs.Add(productID,fullProductName.Text.Substring(indexOfYear, 4));
-                                    }
-                                    break;
-                                }
+                                products.Add(nameOfProduct);
+                                visualStudioProdIDYearPairs.Add(productID, fullProductName.Text.Substring(indexOfYear, 4));
                             }
+                            break;
                         }
-                        break;
                     }
+
+                    break;
                 }
+
                 MetadataTAG metadata = GenerateTagMetadataVulnerability(vulnerability.Title, null, products, vulnerability.CVE);
 
                 //tag upper criteria 
@@ -97,12 +109,14 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                     Criteria criteriaMID = new Criteria();
                     criteriaMID.comment = "VS " + ProdIDYearPair.Value;
                     string nameOfProduct = "Microsoft Visual Studio " + ProdIDYearPair.Value;
-                    criteriaMID.extendDefinition = GenerateTagExtendDefinitionVulnerability(nameOfProduct + " is installed", "oval:en.ovalxmlgen.win:def:" + lastDefrefID.ToString());
-                    //add ref doc (inventory)
-                    refInventoryDef.Add(GenerateTagDefinitionInventorySample(lastDefrefID, nameOfProduct, ProdIDYearPair.Value, lastTestID.ToString()));
-                    //TODO test in inventory
-                    
+                    criteriaMID.extendDefinition = GenerateTagExtendDefinitionVulnerability(nameOfProduct + " is installed", definitionRawStrID + lastDefrefID.ToString());
+                    //add after root definition
+                    refInventoryDef.Add(GenerateTagDefinitionInventory(lastDefrefID, nameOfProduct, ProdIDYearPair.Value, lastRegistryTestID.ToString()));
                     lastDefrefID++;
+                    
+                    CreateExtendedDefinitionHierarchyTreeYearVers(nameOfProduct);
+
+
                     Criteria criteriaBOT = new Criteria();
                     criteriaBOT.criterionsList = new List<Criterion>();
 
@@ -113,13 +127,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                         if (remediation.URL.Contains(ProdIDYearPair.Value) || remediation.ProductIDList[0] == ProdIDYearPair.Key)
                         {
                             string comment = string.Format("Check if the version of Visual Studio is greater than or equal {0} and less than {1}", lowerVersion, upperVersion);
-                            criteriaBOT.criterionsList.Add(new Criterion("oval:en.ovalxmlgen.win:tst:" + lastTestID.ToString(), comment));
+                            criteriaBOT.criterionsList.Add(new Criterion(testRawStrID + lastRegistryTestID.ToString(), comment));
                             //add test tag
-                            string objID = "oval:en.ovalxmlgen.win:obj:" + lastObjID.ToString();
+                            string objID = objectRawStrID + lastObjID.ToString();
 
-                            CreateRegistryTestForPRoductVers(nameOfProduct, lowerVersion, upperVersion, comment, objID);
+                            CreateRegistryTestForProductVers(nameOfProduct, lowerVersion, upperVersion, comment, objID);
 
-                            lastTestID++;
+                            lastRegistryTestID++;
                         }
                     }
                     if (criteriaBOT.criterionsList.Count > 1)
@@ -136,96 +150,116 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                     }
                     criteriaTOP.critersList.Add(criteriaMID);
                     lastObjID++;
-                    lastTestID++;
-                    lastVarID++;
+
                 }
 
 
                 definition.metadata = metadata;
                 definition.criteria = criteriaTOP;
                 resultOVALXML.definitions.definitionsList.Add(definition);
-                foreach (var def in refInventoryDef)
-                    resultOVALXML.definitions.definitionsList.Add(def);
+                resultOVALXML.definitions.definitionsList.AddRange(from def in refInventoryDef
+                                                                   select def);
                 lastDefID++;
+                break;
             }
-            
-            WriteOVALXMLToFile(resultOVALXML, "test");
-
-
-
-
-            WriteOVALXMLToFile(resultOVALXML);
+            return resultOVALXML;
         }
 
-        private void CreateRegistryTestForPRoductVers(string nameOfProduct, string lowerVersion, string upperVersion, string comment, string objID)
+        private void CreateExtendedDefinitionHierarchyTreeYearVers(string nameOfProduct)
         {
-            var t = from registryObject in resultOVALXML.objects.registryObject
-                    where registryObject.comment == "Registry key for " + nameOfProduct
-                    select new { };
+            RegistryTest t = CreateRegistryTestInstallYear(testRawStrID + lastRegistryTestID.ToString(),
+                                                                "Check if " + nameOfProduct + " is installed",
+                                                                objectRawStrID + lastRegistryObjID.ToString());
+            if (!resultOVALXML.tests.registryTest.Contains(t))
+                resultOVALXML.tests.registryTest.Add(t);
+                                       
 
-            if (t.Any())
-                resultOVALXML.objects.registryObject.Add(CreateRegistryObjectKey(nameOfProduct, objID));
-
-            List<State> states = new List<State>();
-            string stateref = "oval:en.ovalxmlgen.win:ste:" + lastStateID;
-            states.Add(new State(stateref));
-            RegistryState registryState1 = new RegistryState(new ValueTAG("greater than or equal", "version", lowerVersion), "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", stateref, "1", "State holds if the version is greater than or equal " + lastStateID);
-            lastStateID++;
-            stateref = "oval:en.ovalxmlgen.win:ste:" + lastStateID;
-            states.Add(new State(stateref));
-            RegistryState registryState2 = new RegistryState(new ValueTAG("less than", "version", upperVersion), "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", stateref, "1", "State holds if the version is greater than or equal " + upperVersion);
-            lastStateID++;
-
-            ObjectTAG objectTAG = new ObjectTAG(objID);
-            RegistryTest registryTest = new RegistryTest("oval:en.ovalxmlgen.win:tst:" + lastTestID.ToString(), comment, states, objectTAG);
-            resultOVALXML.tests.registryTest.Add(registryTest);
+            resultOVALXML.objects.registryObject.Add(
+                CreateRegistryObjectHolds(objectRawStrID + lastRegistryObjID.ToString(),
+                                        "The registry holds " + nameOfProduct, stateRawStrID + lastStateID.ToString()));
+            resultOVALXML.states.registryState.Add(
+               CreateRegistryStateInstall(objectRawStrID + lastRegistryObjID.ToString(), "State matches if " + nameOfProduct + "is installed"));
+            lastRegistryTestID++;
+            resultOVALXML.variables.localVariable.Add(
+                CreateLocalVariableRegProdKey(variableRawStrID + lastVarID.ToString(),
+                                        "Full key path of " + nameOfProduct + " from uninstall registry key",
+                                        objectRawStrID + lastRegistryObjID.ToString()));
+            lastRegistryObjID++;
+            resultOVALXML.objects.registryObject.Add(
+                CreateRegistryObjectRegKey(objectRawStrID + lastRegistryObjID.ToString(),
+                                        "Registry key for " + nameOfProduct,
+                                        variableRawStrID + lastVarID.ToString()));
+            lastVarID++;
         }
 
-        private RegistryObject CreateRegistryObjectKey(string nameOfProduct, string objID)
+        private RegistryTest CreateRegistryTestInstallYear(string ID, string comment, string objectRefID)
         {
-            string keyID = "oval:en.ovalxmlgen.win:var:" + lastVarID.ToString();
-            KeyTAG keyTAG = new KeyTAG(keyID, "at least one");
-            string comment = "Registry key for " + nameOfProduct;
-            RegistryObject registryObject = new RegistryObject(objID, comment, new Behaviors("32_bit"), "HKEY_LOCAL_MACHINE", keyTAG, "DisplayVersion");
+            ObjectTAG objectRefYear = new ObjectTAG(objectRefID);
+            RegistryTest registryTest = new RegistryTest(ID, comment, null, objectRefYear);
+            return registryTest;
+        }
 
-            CreateLocalVarsKey(keyID, "Full key path of " + nameOfProduct + " from uninstall registry key", lastTestID.ToString()); //TODO id ????
+        private RegistryObject CreateRegistryObjectHolds(string id, string comment, string filterId)
+        {
 
-
+            SetTAG set = new SetTAG();
+            set.objectReference = objectRawStrID + "99999";
+            set.filter = new Filter() { action = "include", text = filterId };
+            RegistryObject registryObject = new RegistryObject(id, comment, null, null, null, null, set: set);   
 
             return registryObject;
         }
 
-        private void CreateLocalVarsKey(string id, string comment, string idRefObject, string version = "1", string datatype = "string")
+        private RegistryState CreateRegistryStateInstall(string id, string comment)
         {
-            var t = "Full key path of Microsoft Visual Studio 2022 from uninstall registry key";
-            var idRefObjectFull = "oval:en.ovalxmlgen.win:obj:" + idRefObject;
-            ObjectComponent objectComponent = new ObjectComponent("key", "oval:en.ovalxmlgen.win:obj:" + idRefObject);
-            LocalVariable localVariable = new LocalVariable("oval:en.ovalxmlgen.win:var:" + id, version, comment, datatype, objectComponent);
-            resultOVALXML.variables.localVariable.Add(localVariable);
+            RegistryState registryState = new RegistryState(id, comment);
+
+            registryState.value = new ValueTAG() { operation = "pattern match", text = "^Visual Studio.*2022$" } ;
+            return registryState;
         }
 
-        public Oval_definitions LoadSample()
+        private LocalVariable CreateLocalVariableRegProdKey(string id, string comment, string objComponentID)
         {
-            //load sample with standart settings
-            using (StreamReader reader = new StreamReader("sample.xml"))
-            {
-                var test = (Oval_definitions)serializer.Deserialize(reader);
-                return test;
-            }
+            ObjectComponent objectComponent = new ObjectComponent("key", objectRawStrID + objComponentID);
+            LocalVariable localVariable = new LocalVariable(id, "1", comment, "string", objectComponent);
+            return localVariable;
         }
 
-        public void WriteOVALXMLToFile(Oval_definitions resultdoc, string nameOfFile = "res")
+        private RegistryObject CreateRegistryObjectRegKey(string id, string comment, string objComponentID)
         {
-            Stream fs = new FileStream(nameOfFile + ".xml", FileMode.Create);
-            XmlWriter writer = new XmlTextWriter(fs, Encoding.UTF8);
-            var ns = new XmlSerializerNamespaces();
-            ns.Add("oval", "http://oval.mitre.org/XMLSchema/oval-common-5");
-            ns.Add("schemaLocation", "http://oval.mitre.org/XMLSchema/oval-definitions-5 oval-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#windows windows-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#independent independent-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#linux linux-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#unix unix-definitions-schema.xsd");
-            ns.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            Behaviors behaviors = new Behaviors("32_bit");
+            KeyTAG keyTAG = new KeyTAG(id, "at least one");
 
-            serializer.Serialize(writer, resultdoc, ns);
-            Console.WriteLine("Writing OVAL XML to file complited.");
+            RegistryObject registryObject = new RegistryObject(id, comment, behaviors, "HKEY_LOCAL_MACHINE", keyTAG, "DisplayVersion");
+
+            return registryObject;
         }
+
+
+
+
+        private RegistryTest CreateRegistryTestForProductVers(string id, string comment, string objID, string lowerVersion, string upperVersion)
+        {
+
+            ObjectTAG objectTAG = new ObjectTAG(objectRawStrID + lastRegistryObjID.ToString());
+
+            List<State> states = new List<State>();
+            states.Add(CreateStateAndRegistryStateProdVers(lowerVersion));
+            states.Add(CreateStateAndRegistryStateProdVers(upperVersion));
+
+            RegistryTest registryTest = new RegistryTest(id, comment, states, objectTAG);
+            return registryTest;
+        }
+
+        private State CreateStateAndRegistryStateProdVers(string version)
+        {
+            string stateref = stateRawStrID + lastStateID;
+            RegistryState registryState = new RegistryState(new ValueTAG("less than", "version", version), "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", stateref, "1", "State holds if the version is greater than or equal " + version);
+            resultOVALXML.states.registryState.Add(registryState);
+            lastStateID++;
+            return new State(stateref);
+        }
+
 
 
         public MetadataTAG GenerateTagMetadataVulnerability(string titleDescriprtion, List<string> platforms, List<string> products, string cveID, string family = "Windows")
@@ -257,6 +291,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
 
             if (cveID != null)
             {
+                metadata.referencesList = new List<Reference>();
                 metadata.referencesList.Add(new Reference() { source = "Microsoft", ref_id = cveID, ref_url = "https://msrc.microsoft.com/update-guide/vulnerability/" + cveID });
                 metadata.referencesList.Add(new Reference() { source = "CVE", ref_id = cveID, ref_url = "https://cve.mitre.org/cgi-bin/cvename.cgi?name=" + cveID });
             }
@@ -271,18 +306,18 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             return extendDefinition;
         }
 
-        public Definition GenerateTagDefinitionInventorySample(int id, string productName, string productYear, string testid)
+        public Definition GenerateTagDefinitionInventory(int id, string productName, string productYear, string registryTestid)
         {
             Definition definition = new Definition();
             definition.@class = "inventory";
-            definition.id = "oval:en.ovalxmlgen.win:def: " + id;
+            definition.id = definitionRawStrID + id;
             definition.version = "1";
             //metadata
             MetadataTAG metadata = GenerateTagMetadataInventorySample(productName, productYear);
             definition.metadata = metadata;
             definition.criteria = new Criteria();
             definition.criteria.criterionsList = new List<Criterion>();
-            definition.criteria.criterionsList.Add(new Criterion("oval:en.ovalxmlgen.win:tst:" + testid, "Check if " + productName + " is installed"));
+            definition.criteria.criterionsList.Add(new Criterion(testRawStrID + registryTestid, "Check if " + productName + " is installed"));
             return definition;
         }
 
@@ -308,6 +343,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             }
             metadata.affected.productsList = new List<string>();
             metadata.affected.productsList.Add(productName);
+            metadata.referencesList = new List<Reference>();
             metadata.referencesList.Add(new Reference() { source = "CPE", ref_id = "cpe:/a:microsoft:visual_studio:" + productYear });
             return metadata;
         }
@@ -329,6 +365,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             return VulnerabListFiltredByProj;
         }
 
+
+        private RegistryObject CreateUninstallRegistryObject()
+        {
+            RegistryObject registryObject = new RegistryObject(objectRawStrID + "99999", null, new Behaviors("32_bit"), "HKEY_LOCAL_MACHINE",
+                new KeyTAG() { operation = "pattern match", text = "^Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\.*$" }, "DisplayName");
+            return registryObject;
+        }
 
 
     }

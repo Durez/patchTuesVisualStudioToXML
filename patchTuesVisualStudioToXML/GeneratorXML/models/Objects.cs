@@ -72,11 +72,11 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public string text { get; set; }
 	}
 
-	[XmlRoot(ElementName = "registry_object")]
+	[XmlRoot(ElementName = "registry_object", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
 	public class RegistryObject
 	{
 
-		[XmlElement(ElementName = "set")]
+		[XmlElement(ElementName = "set", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
 		public SetTAG set { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
@@ -114,7 +114,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
         }
 
-        public RegistryObject(string id, string comment, Behaviors behaviors, string hive, KeyTAG key, string name, string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", string namespace1 = "http://oval.mitre.org/XMLSchema/oval-definitions-5", string version = "1", SetTAG? set = null, string? text = null)
+        public RegistryObject(string id, string comment, Behaviors? behaviors, string? hive, KeyTAG key, string name, string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", string namespace1 = "http://oval.mitre.org/XMLSchema/oval-definitions-5", string version = "1", SetTAG? set = null, string? text = null)
         {
             this.xmlns = xmlns;
             this.ns1 = namespace1;
@@ -122,11 +122,11 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
             this.version = version;
             this.comment = comment;
 			if (text != null) this.text = text;
-            this.hive = hive;
+			if (hive != null) this.hive = hive;
             this.name = name;
 
             this.key = key;
-            this.behaviors = behaviors;
+			if (behaviors != null) this.behaviors = behaviors;
             if (set != null) this.set = set;
         }
     }
@@ -157,7 +157,18 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		[XmlAttribute(AttributeName = "var_check")]
 		public string varCheck { get; set; }
 
-        public KeyTAG(string varRef, string varCheck)
+		[XmlAttribute(AttributeName = "operation")]
+		public string operation { get; set; }
+
+		[XmlText]
+		public string text { get; set; }
+
+        public KeyTAG()
+        {
+
+        }
+
+		public KeyTAG(string varRef, string varCheck)
         {
             this.varRef = varRef;
             this.varCheck = varCheck;

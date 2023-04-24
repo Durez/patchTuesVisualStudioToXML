@@ -29,7 +29,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlAttribute(AttributeName = "state_ref")]
 		public string stateRef { get; set; }
-        
+        public State()
+        {
+
+        }
 		public State(string stateRef)
         {
             this.stateRef = stateRef;

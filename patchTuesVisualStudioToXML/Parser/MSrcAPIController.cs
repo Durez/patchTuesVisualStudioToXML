@@ -26,7 +26,7 @@ namespace patchTuesVisualStudioToXML.Parser
         public async Task<string> GETRawCvrfURLAsync()
         {
             HttpResponseMessage response = await httpClient.GetAsync(string.Format(@"https://api.msrc.microsoft.com/cvrf/v2.0/Updates('{0}-{1}')", DateTime.Now.ToString("yyyy"), DateTime.Now.ToString("MMM", new CultureInfo("en-US"))));
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
                 throw new MSRCAPIControllerStatusCodeExeption(response.StatusCode.ToString());
 
             string rawResponse = await response.Content.ReadAsStringAsync();
@@ -42,7 +42,7 @@ namespace patchTuesVisualStudioToXML.Parser
         public async Task<Cvrfdoc> GETXMLCvrfAsync(string url)
         {
             HttpResponseMessage response = await httpClient.GetAsync(url);
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
                 throw new MSRCAPIControllerStatusCodeExeption(response.StatusCode.ToString());
 
             Console.WriteLine("Start serialize response to CvrfXML.");
