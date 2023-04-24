@@ -8,33 +8,33 @@ using System.Xml.Serialization;
 namespace patchTuesVisualStudioToXML.GeneratorXML.models
 {
 	[XmlRoot(ElementName = "object_component")]
-	public class object_component
+	public class ObjectComponent
 	{
 
 		[XmlAttribute(AttributeName = "item_field")]
-		public string item_field { get; set; }
+		public string itemField { get; set; }
 
 		[XmlAttribute(AttributeName = "object_ref")]
-		public string object_ref { get; set; }
+		public string objectRef { get; set; }
 	}
 
 	[XmlRoot(ElementName = "concat")]
-	public class concat
+	public class Concat
 	{
 
 		[XmlElement(ElementName = "object_component")]
-		public object_component object_component { get; set; }
+		public ObjectComponent objectComponent { get; set; }
 
 		[XmlElement(ElementName = "literal_component")]
-		public string literal_component { get; set; }
+		public string literalComponent { get; set; }
 	}
 
 	[XmlRoot(ElementName = "local_variable")]
-	public class local_variable
+	public class LocalVariable
 	{
 
 		[XmlElement(ElementName = "concat")]
-		public concat concat { get; set; }
+		public Concat concat { get; set; }
 
 		[XmlAttribute(AttributeName = "id")]
 		public string id { get; set; }
@@ -52,15 +52,15 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public string text { get; set; }
 
 		[XmlElement(ElementName = "object_component")]
-		public object_component object_component { get; set; }
+		public ObjectComponent objectComponent { get; set; }
 	}
 
 	[XmlRoot(ElementName = "variables")]
-	public class variables
+	public class Variables
 	{
 
 		[XmlElement(ElementName = "local_variable")]
-		public List<local_variable> local_variable { get; set; }
+		public List<LocalVariable> localVariable { get; set; }
 	}
 
 

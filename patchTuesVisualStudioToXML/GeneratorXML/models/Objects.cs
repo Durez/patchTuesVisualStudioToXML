@@ -8,22 +8,22 @@ using System.Xml.Serialization;
 namespace patchTuesVisualStudioToXML.GeneratorXML.models
 {
 	[XmlRoot(ElementName = "path")]
-	public class path
+	public class PathTAG
 	{
 
 		[XmlAttribute(AttributeName = "var_ref")]
-		public string var_ref { get; set; }
+		public string varRef { get; set; }
 
 		[XmlAttribute(AttributeName = "var_check")]
-		public string var_check { get; set; }
+		public string varCheck { get; set; }
 	}
 
 	[XmlRoot(ElementName = "file_object")]
-	public class file_object
+	public class FileObject
 	{
 
 		[XmlElement(ElementName = "path")]
-		public path path { get; set; }
+		public PathTAG path { get; set; }
 
 		[XmlElement(ElementName = "filename")]
 		public string filename { get; set; }
@@ -45,7 +45,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	}
 
 	[XmlRoot(ElementName = "filter")]
-	public class filter
+	public class Filter
 	{
 
 		[XmlAttribute(AttributeName = "action")]
@@ -56,14 +56,14 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	}
 
 	[XmlRoot(ElementName = "set")]
-	public class set
+	public class SetTAG
 	{
 
 		[XmlElement(ElementName = "object_reference")]
-		public string object_reference { get; set; }
+		public string objectReference { get; set; }
 
 		[XmlElement(ElementName = "filter")]
-		public filter filter { get; set; }
+		public Filter filter { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
 		public string xmlns { get; set; }
@@ -73,11 +73,11 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	}
 
 	[XmlRoot(ElementName = "registry_object")]
-	public class registry_object
+	public class RegistryObject
 	{
 
 		[XmlElement(ElementName = "set")]
-		public set set { get; set; }
+		public SetTAG set { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
 		public string xmlns { get; set; }
@@ -98,46 +98,46 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public string text { get; set; }
 
 		[XmlElement(ElementName = "behaviors")]
-		public behaviors behaviors { get; set; }
+		public Behaviors behaviors { get; set; }
 
 		[XmlElement(ElementName = "hive")]
 		public string hive { get; set; }
 
 		[XmlElement(ElementName = "key")]
-		public key key { get; set; }
+		public KeyTAG key { get; set; }
 
 		[XmlElement(ElementName = "name")]
 		public string name { get; set; }
 	}
 
 	[XmlRoot(ElementName = "behaviors")]
-	public class behaviors
+	public class Behaviors
 	{
 
 		[XmlAttribute(AttributeName = "windows_view")]
-		public string windows_view { get; set; }
+		public string windowsView { get; set; }
 	}
 
 	[XmlRoot(ElementName = "key")]
-	public class key
+	public class KeyTAG
 	{
 
 		[XmlAttribute(AttributeName = "var_ref")]
-		public string var_ref { get; set; }
+		public string varRef { get; set; }
 
 		[XmlAttribute(AttributeName = "var_check")]
-		public string var_check { get; set; }
+		public string varCheck { get; set; }
 	}
 
 	[XmlRoot(ElementName = "objects")]
-	public class objects
+	public class Objects
 	{
 
 		[XmlElement(ElementName = "file_object")]
-		public List<file_object> file_object { get; set; }
+		public List<FileObject> fileObject { get; set; }
 
 		[XmlElement(ElementName = "registry_object")]
-		public List<registry_object> registry_object { get; set; }
+		public List<RegistryObject> registryObject { get; set; }
 	}
 
 

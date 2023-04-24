@@ -16,19 +16,19 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public GeneratorTAG generator { get; set; }
 
 		[XmlElement(ElementName = "variables")]
-		public variables variables { get; set; }
+		public Variables variables { get; set; }
 
 		[XmlElement(ElementName = "states")]
 		public states states { get; set; }
 
 		[XmlElement(ElementName = "objects")]
-		public objects objects { get; set; }
+		public Objects objects { get; set; }
 
 		[XmlElement(ElementName = "definitions")]
 		public Definitions definitions { get; set; }
 
 		[XmlElement(ElementName = "tests")]
-		public tests tests { get; set; }
+		public Tests tests { get; set; }
 
 		[XmlAttribute(AttributeName = "xsi")]
 		public string xsi { get; set; }

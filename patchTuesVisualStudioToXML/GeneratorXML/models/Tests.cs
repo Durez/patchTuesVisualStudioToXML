@@ -8,30 +8,30 @@ using System.Xml.Serialization;
 namespace patchTuesVisualStudioToXML.GeneratorXML.models
 {
 	[XmlRoot(ElementName = "object")]
-	public class @object
+	public class ObjectTAG
 	{
 
 		[XmlAttribute(AttributeName = "object_ref")]
-		public string object_ref { get; set; }
+		public string objectRef { get; set; }
 	}
 
 	[XmlRoot(ElementName = "state")]
-	public class state
+	public class State
 	{
 
 		[XmlAttribute(AttributeName = "state_ref")]
-		public string state_ref { get; set; }
+		public string stateRef { get; set; }
 	}
 
 	[XmlRoot(ElementName = "registry_test")]
-	public class registry_test
+	public class RegistryTest
 	{
 
 		[XmlElement(ElementName = "object")]
-		public @object @object { get; set; }
+		public ObjectTAG objectTag { get; set; }
 
 		[XmlElement(ElementName = "state")]
-		public List<state> state { get; set; }
+		public List<State> states { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
 		public string xmlns { get; set; }
@@ -46,21 +46,21 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public string comment { get; set; }
 
 		[XmlAttribute(AttributeName = "check_existence")]
-		public string check_existence { get; set; }
+		public string checkExistence { get; set; }
 
 		[XmlAttribute(AttributeName = "check")]
 		public string check { get; set; }
 	}
 
 	[XmlRoot(ElementName = "file_test")]
-	public class file_test
+	public class FileTest
 	{
 
 		[XmlElement(ElementName = "object")]
-		public @object @object { get; set; }
+		public ObjectTAG @object { get; set; }
 
 		[XmlElement(ElementName = "state")]
-		public List<state> state { get; set; }
+		public List<State> state { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
 		public string xmlns { get; set; }
@@ -75,21 +75,21 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public string comment { get; set; }
 
 		[XmlAttribute(AttributeName = "check_existence")]
-		public string check_existence { get; set; }
+		public string checkExistence { get; set; }
 
 		[XmlAttribute(AttributeName = "check")]
 		public string check { get; set; }
 	}
 
 	[XmlRoot(ElementName = "tests")]
-	public class tests
+	public class Tests
 	{
 
 		[XmlElement(ElementName = "registry_test")]
-		public List<registry_test> registry_test { get; set; }
+		public List<RegistryTest> registryTest { get; set; }
 
 		[XmlElement(ElementName = "file_test")]
-		public List<file_test> file_test { get; set; }
+		public List<FileTest> fileTest { get; set; }
 	}
 
 
