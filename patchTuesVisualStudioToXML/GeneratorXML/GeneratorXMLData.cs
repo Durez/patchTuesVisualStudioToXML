@@ -20,7 +20,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         private const string stateRawStrID = rawIDstring + ":ste:";
         private const string variableRawStrID = rawIDstring + ":var:";
 
-        private static readonly List<string> platformsConst = new List<string>()
+        private readonly List<string> platformsConst = new List<string>()
                     { "Microsoft Windows 7", "Microsoft Windows 8.1", "Microsoft Windows 10", "Microsoft Windows 11",
                         "Microsoft Windows Server 2008", "Microsoft Windows Server 2008 R2", "Microsoft Windows Server 2012",
                         "Microsoft Windows Server 2012 R2", "Microsoft Windows Server 2016", "Microsoft Windows Server 2019"};
@@ -32,12 +32,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         private int lastStateID = 33333;
         private int lastVarID = 44444;
         
-        private Cvrfdoc cvrfdoc {get;}
         public OvalDefinitions resultOVALXML { get; set; }
-        public GeneratorXMLData()
-        {
 
-        }
         public GeneratorXMLData(OvalDefinitions sampleDoc)
         {
             resultOVALXML = sampleDoc;
@@ -336,11 +332,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             metadata.description = productName + " is installed";
             metadata.affected = new Affected();
             metadata.affected.family = "windows";
-            metadata.affected.platformsList = new List<string>();
-            foreach (var item in platformsConst)
-            {
-                metadata.affected.platformsList.Add(item);
-            }
+            metadata.affected.platformsList = (from item in platformsConst
+                                               select item).ToList();
             metadata.affected.productsList = new List<string>();
             metadata.affected.productsList.Add(productName);
             metadata.referencesList = new List<Reference>();
