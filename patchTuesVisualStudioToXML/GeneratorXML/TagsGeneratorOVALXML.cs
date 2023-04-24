@@ -20,7 +20,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         }
 
         public Oval_definitions LoadSample()
-        {             
+        {
             //load sample with standart settings
             using (StreamReader reader = new StreamReader("sample.xml"))
             {
@@ -43,32 +43,6 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         }
 
 
-        /// <summary>
-        /// Create tag "generator" in XML using only requered params
-        /// </summary>
-        /// <param name="schema_version">Specifies the version of the OVAL Schema that the document has been written in and that should be used for validation</param>
-        public GeneratorTAG GenerateTagGenerator(string schema_version)
-        {
-            GeneratorTAG generator = new GeneratorTAG();
-            string timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
-            generator.schema_version = schema_version;
-            generator.timestamp = timestamp;
-            return generator;
-        }
-        /// <summary>
-        /// Create tag "generator" in XML using requered and optional params
-        /// </summary>
-        /// <param name="product_name">Specifies the name of the application used to generate the file</param>
-        /// <param name="product_version">Specifies the version of the application used to generate the file</param>
-        /// <param name="schema_version">Specifies the version of the OVAL Schema that the document has been written in and that should be used for validation</param>
-        public GeneratorTAG GenerateTagGenerator(string schema_version, string? product_name = null, string? product_version = null)
-        {
-            GeneratorTAG generator = GenerateTagGenerator(schema_version);
-            if (product_name != null) generator.product_name = product_name;
-            if (product_version != null) generator.schema_version = product_version;
-            return generator;
-        }
-
         public MetadataTAG GenerateTagMetadataVulnerability(string titleDescriprtion, List<string> platforms, List<string> products, string cveID, string family = "Windows")
         {
             MetadataTAG metadata = new MetadataTAG();
@@ -79,14 +53,14 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             }
             else throw new Exception();
 
-            if (platforms != null || products != null) 
-            { 
+            if (platforms != null || products != null)
+            {
                 Affected affected = new Affected();
                 if (platforms != null)
                     affected.platformsList = platforms;
                 else
                 {
-                    affected.platformsList =  new List<string>()
+                    affected.platformsList = new List<string>()
                     { "Microsoft Windows 7", "Microsoft Windows 8.1", "Microsoft Windows 10", "Microsoft Windows 11",
                         "Microsoft Windows Server 2008", "Microsoft Windows Server 2008 R2", "Microsoft Windows Server 2012",
                         "Microsoft Windows Server 2012 R2", "Microsoft Windows Server 2016", "Microsoft Windows Server 2019",
@@ -94,13 +68,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
 
                 }
                 if (products != null)
-                        affected.productsList = products;
+                    affected.productsList = products;
 
                 if (family != null) affected.family = family;
-                metadata.affected = affected; 
+                metadata.affected = affected;
             }
 
-            if (cveID != null) 
+            if (cveID != null)
             {
                 metadata.referencesList.Add(new Reference() { source = "Microsoft", ref_id = cveID, ref_url = "https://msrc.microsoft.com/update-guide/vulnerability/" + cveID });
                 metadata.referencesList.Add(new Reference() { source = "CVE", ref_id = cveID, ref_url = "https://cve.mitre.org/cgi-bin/cvename.cgi?name=" + cveID });
@@ -108,53 +82,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             return metadata;
         }
 
-
-        public Criteria GenerateTagCriteriaTOP(List<Criteria> MIDcriteries)
-        {
-            Criteria criteria = new Criteria();
-            if (MIDcriteries.Count > 1)
-            {
-                criteria.@operator = "OR";
-            }
-            foreach (var crit in MIDcriteries)
-            {
-                criteria.critersList.Add(crit);
-            }
-            return criteria;
-        }
-        public Criteria GenerateTagCriteriaMID(List<Criterion> criterions,ExtendDefinition extendDefinition, string comment)
-        {
-            Criteria criteria = new Criteria();
-            criteria.critersList.Add(new Criteria());
-            criteria.comment = comment;
-            if (criterions.Count > 1)
-            {
-                criteria.critersList[0].@operator = "OR";
-            }
-            foreach (var crit in criterions)
-            {
-                criteria.critersList[0].criterionsList.Add(crit);
-                criteria.comment = "Vulnerable versions";
-            }
-            return criteria;
-        }
-
-
-        public Criterion GenerateTagCriterion(string comment, string id)
-        {
-            Criterion criterion = new Criterion();
-            criterion.testRef = "oval:en.ovalxmlgen.win:tst: " + id;
-            criterion.comment = comment;
-            return criterion;
-        }
-        public Criterion GenerateTagCriterionVulnerability(string lowerVersion, string upperVersion, string id)
-        {
-            Criterion criterion = new Criterion();
-            criterion.testRef = "oval:en.ovalxmlgen.win:tst: " + id;
-            criterion.comment = string.Format("Check if the version of Visual Studio is greater than or equal {0} and less than {1}", lowerVersion, upperVersion);
-            return criterion;
-        }
-        public ExtendDefinition GenerateTagExtendDefinitionVulnerability(string comment, string def_ref) 
+        public ExtendDefinition GenerateTagExtendDefinitionVulnerability(string comment, string def_ref)
         {
             ExtendDefinition extendDefinition = new ExtendDefinition();
             extendDefinition.comment = comment;
@@ -173,10 +101,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             Definition definition = new Definition();
             definition.@class = "inventory";
             definition.id = "oval:en.ovalxmlgen.win:def: " + def_ref;
+            definition.version = "1";
             //metadata
             MetadataTAG metadata = GenerateTagMetadataInventorySample(productName, productYear);
             definition.metadata = metadata;
-            definition.criteria.criterionsList.Add(GenerateTagCriterion("Check if " + productName + " is installed", testid));
+            definition.criteria = new Criteria();
+            definition.criteria.criterionsList = new List<Criterion>();
+            definition.criteria.criterionsList.Add(new Criterion("oval:en.ovalxmlgen.win:tst:" + testid, "Check if " + productName + " is installed"));
             return definition;
         }
 
@@ -197,15 +128,19 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             MetadataTAG metadata = new MetadataTAG();
             metadata.title = productName + " is installed";
             metadata.description = productName + " is installed";
+            metadata.affected = new Affected();
             metadata.affected.family = "windows";
+            metadata.affected.platformsList = new List<string>();
             foreach (var item in platforms)
             {
                 metadata.affected.platformsList.Add(item);
             }
+            metadata.affected.productsList = new List<string>();
             metadata.affected.productsList.Add(productName);
             metadata.referencesList.Add(new Reference() { source = "CPE", ref_id = "cpe:/a:microsoft:visual_studio:" + productYear });
             return metadata;
         }
+
 
     }
 }
