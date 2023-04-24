@@ -44,10 +44,12 @@ namespace patchTuesVisualStudioToXML.Parser
             HttpResponseMessage response = await httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
+                Console.WriteLine("Start serialize response to CvrfXML.");
                 string rawResponse = await response.Content.ReadAsStringAsync();
                 XmlSerializer serializer = new XmlSerializer(typeof(Cvrfdoc));
                 using (StringReader reader = new StringReader(rawResponse))
                     return (Cvrfdoc)serializer.Deserialize(reader);
+                Console.WriteLine("CvrfXML serialized.");
             }
             else throw new Exception(response.StatusCode.ToString());
         }
