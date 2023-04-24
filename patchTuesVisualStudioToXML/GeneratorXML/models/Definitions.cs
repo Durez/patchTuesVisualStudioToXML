@@ -98,9 +98,6 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	public class Criteria
 	{
 
-		[XmlElement(ElementName = "criterion")]
-		public List<Criterion> criterionsList { get; set; }
-
 		[XmlAttribute(AttributeName = "operator")]
 		public string @operator { get; set; }
 
@@ -109,6 +106,9 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlElement(ElementName = "extend_definition")]
 		public ExtendDefinition extendDefinition { get; set; }
+		[XmlElement(ElementName = "criterion")]
+
+		public List<Criterion> criterionsList { get; set; }
 
 		[XmlElement(ElementName = "criteria")]
 		public List<Criteria> critersList { get; set; }
