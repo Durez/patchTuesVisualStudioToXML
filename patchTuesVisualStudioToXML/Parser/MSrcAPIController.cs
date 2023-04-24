@@ -27,13 +27,13 @@ namespace patchTuesVisualStudioToXML.Parser
         {
             HttpResponseMessage response = await httpClient.GetAsync(string.Format(@"https://api.msrc.microsoft.com/cvrf/v2.0/Updates('{0}-{1}')", DateTime.Now.ToString("yyyy"), DateTime.Now.ToString("MMM", new CultureInfo("en-US"))));
             if (response.IsSuccessStatusCode)
-            {
-                string rawResponse = await response.Content.ReadAsStringAsync();
-                MsrcUpdate res = JsonConvert.DeserializeObject<MsrcUpdate>(rawResponse);
+                throw new MSRCAPIControllerStatusCodeExeption(response.StatusCode.ToString());
+
+            string rawResponse = await response.Content.ReadAsStringAsync();
+            MsrcUpdate res = JsonConvert.DeserializeObject<MsrcUpdate>(rawResponse);
        
-                return res.msrcUpdateValues[0].CvrfUrl;
-            }
-            else throw new Exception(response.StatusCode.ToString() + ' ' + response.RequestMessage.ToString());
+            return res.msrcUpdateValues[0].CvrfUrl;
+
         }
 
 
@@ -43,15 +43,14 @@ namespace patchTuesVisualStudioToXML.Parser
         {
             HttpResponseMessage response = await httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Start serialize response to CvrfXML.");
-                string rawResponse = await response.Content.ReadAsStringAsync();
-                XmlSerializer serializer = new XmlSerializer(typeof(Cvrfdoc));
-                using (StringReader reader = new StringReader(rawResponse))
-                    return (Cvrfdoc)serializer.Deserialize(reader);
-                Console.WriteLine("CvrfXML serialized.");
-            }
-            else throw new Exception(response.StatusCode.ToString());
+                throw new MSRCAPIControllerStatusCodeExeption(response.StatusCode.ToString());
+
+            Console.WriteLine("Start serialize response to CvrfXML.");
+            string rawResponse = await response.Content.ReadAsStringAsync();
+            XmlSerializer serializer = new XmlSerializer(typeof(Cvrfdoc));
+            using (StringReader reader = new StringReader(rawResponse))
+                return (Cvrfdoc)serializer.Deserialize(reader);
+            Console.WriteLine("CvrfXML serialized.");
         }
     }
 }
