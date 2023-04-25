@@ -11,6 +11,8 @@ using System.Xml;
 using System.Globalization;
 using patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel;
 using System.Xml.Serialization;
+using patchTuesVisualStudioToXML.DAL;
+using patchTuesVisualStudioToXML.DAL.Entities;
 
 namespace patchTuesVisualStudioToXML.Parser
 {
@@ -52,5 +54,6 @@ namespace patchTuesVisualStudioToXML.Parser
                 return (Cvrfdoc)serializer.Deserialize(reader);
             Console.WriteLine("CvrfXML serialized.");
         }
+
     }
 }

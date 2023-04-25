@@ -1,6 +1,7 @@
 ﻿using patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel;
 using patchTuesVisualStudioToXML.GeneratorXML.models;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace patchTuesVisualStudioToXML.GeneratorXML
 {
@@ -25,11 +26,21 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         private int lastStateID = 33333;
         private int lastVarID = 44444;
         
-        public OvalDefinitions resultOVALXML { get; set; }
+        private OvalDefinitions resultOVALXML { get; set; }
 
-        public GeneratorXMLData(OvalDefinitions sampleDoc)
+        public GeneratorXMLData(bool hasSamlpe)
         {
-            resultOVALXML = sampleDoc;
+            if (hasSamlpe)
+                resultOVALXML = LoadSample();
+        }
+        private OvalDefinitions LoadSample()
+        {
+            using (StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "/Resourses/sample.xml"))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(OvalDefinitions));
+                var test = (OvalDefinitions)serializer.Deserialize(reader);
+                return test;
+            }
         }
         public OvalDefinitions GenerateXMLData(Cvrfdoc cvrfdoc)
         {
