@@ -12,37 +12,37 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	public class OvalDefinitions
 	{
 		[XmlElement(ElementName = "generator")]
-		public GeneratorTAG generator { get; set; }
+		public GeneratorTAG Generator { get; set; }
 
 		[XmlElement(ElementName = "definitions")]
-		public Definitions definitions { get; set; }
+		public Definitions Definitions { get; set; }
 
 		[XmlElement(ElementName = "tests")]
-		public Tests tests { get; set; }
+		public Tests Tests { get; set; }
 
 		[XmlElement(ElementName = "objects")]
-		public Objects objects { get; set; }
+		public Objects Objects { get; set; }
 
 		[XmlElement(ElementName = "states")]
-		public States states { get; set; }
+		public States States { get; set; }
 
 		[XmlElement(ElementName = "variables")]
-		public Variables variables { get; set; }
+		public Variables Variables { get; set; }
 
 		[XmlAttribute(AttributeName = "xsi")]
-		public string xsi { get; set; }
+		public string Xsi { get; set; }
 
 		[XmlAttribute(AttributeName = "oval")]
-		public string oval { get; set; }
+		public string Oval { get; set; }
 
 		[XmlAttribute(AttributeName = "schemaLocation")]
-		public string schemaLocation { get; set; }
+		public string SchemaLocation { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
-		public string xmlns { get; set; }
+		public string Xmlns { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
 
 		
 	}

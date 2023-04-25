@@ -33,18 +33,18 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         }
         public OvalDefinitions GenerateXMLData(Cvrfdoc cvrfdoc)
         {
-            resultOVALXML.generator = new GeneratorTAG(schemaVersion, "OVALXMLgen by AGA");
+            resultOVALXML.Generator = new GeneratorTAG(schemaVersion, "OVALXMLgen by AGA");
 
             List<Vulnerability> VulnerabListFiltredByProj = GetVulnerabilities(cvrfdoc);
 
-            resultOVALXML.tests.registryTest = new List<RegistryTest>();
-            resultOVALXML.objects.registryObject = new List<RegistryObject>();
+            resultOVALXML.Tests.RegistryTest = new List<RegistryTest>();
+            resultOVALXML.Objects.RegistryObject = new List<RegistryObject>();
 
             //create uninstall registry object
-            resultOVALXML.objects.registryObject.Add(CreateUninstallRegistryObject());
+            resultOVALXML.Objects.RegistryObject.Add(CreateUninstallRegistryObject());
 
             //tag defenitions
-            resultOVALXML.definitions.definitionsList = new List<Definition>();
+            resultOVALXML.Definitions.DefinitionsList = new List<Definition>();
             foreach (Vulnerability vulnerability in VulnerabListFiltredByProj)
             {
                 //list of ref docs (inventory)
@@ -52,9 +52,9 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
 
                 //root of def
                 Definition definition = new Definition();
-                definition.@class = "vulnerability";
-                definition.id = definitionRawStrID + lastDefID.ToString();
-                definition.version = "1";
+                definition.Class = "vulnerability";
+                definition.Id = definitionRawStrID + lastDefID.ToString();
+                definition.Version = "1";
 
                 //tag metadata
                 List<string> products = new List<string>();
@@ -81,17 +81,17 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
 
                 //tag upper criteria 
                 Criteria criteriaTOP = new Criteria();
-                criteriaTOP.critersList = new List<Criteria>();
+                criteriaTOP.CritersList = new List<Criteria>();
                 if (visualStudioProdIDYearPairs.Count > 1)
                 {
-                    criteriaTOP.@operator = "OR";
+                    criteriaTOP.Operator = "OR";
                 }
                 foreach (var ProdIDYearPair in visualStudioProdIDYearPairs)
                 {
                     Criteria criteriaMID = new Criteria();
-                    criteriaMID.comment = "VS " + ProdIDYearPair.Value;
+                    criteriaMID.Comment = "VS " + ProdIDYearPair.Value;
                     string nameOfProduct = "Microsoft Visual Studio " + ProdIDYearPair.Value;
-                    criteriaMID.extendDefinition = GenerateTagExtendDefinitionVulnerability(nameOfProduct + " is installed", definitionRawStrID + lastDefrefID.ToString());
+                    criteriaMID.ExtendDefinition = GenerateTagExtendDefinitionVulnerability(nameOfProduct + " is installed", definitionRawStrID + lastDefrefID.ToString());
                     //add after root definition
                     refInventoryDef.Add(GenerateTagDefinitionInventory(lastDefrefID, nameOfProduct, ProdIDYearPair.Value, lastRegistryTestID.ToString()));
                     lastDefrefID++;
@@ -100,38 +100,38 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
 
 
                     Criteria criteriaBOT = new Criteria();
-                    criteriaBOT.criterionsList = new List<Criterion>();
+                    criteriaBOT.CriterionsList = new List<Criterion>();
 
                     foreach (var (lowerVersion, upperVersion, comment) in GetCriterionsInfo(vulnerability, ProdIDYearPair))
                     {
-                        criteriaBOT.criterionsList.Add(new Criterion(testRawStrID + lastRegistryTestID.ToString(), comment));
+                        criteriaBOT.CriterionsList.Add(new Criterion(testRawStrID + lastRegistryTestID.ToString(), comment));
                         //add registry test tag
-                        resultOVALXML.tests.registryTest.Add(CreateRegistryTestForProductVers(testRawStrID + lastRegistryTestID.ToString(), comment, nameOfProduct, lowerVersion, upperVersion));
+                        resultOVALXML.Tests.RegistryTest.Add(CreateRegistryTestForProductVers(testRawStrID + lastRegistryTestID.ToString(), comment, nameOfProduct, lowerVersion, upperVersion));
                         lastRegistryTestID++;
                     }
 
-                    if (criteriaBOT.criterionsList.Count > 1)
+                    if (criteriaBOT.CriterionsList.Count > 1)
                     {
-                        criteriaMID.critersList = new List<Criteria>();
-                        criteriaBOT.comment = "Vulnerable versions";
-                        criteriaBOT.@operator = "OR";
-                        criteriaMID.critersList.Add(criteriaBOT);
+                        criteriaMID.CritersList = new List<Criteria>();
+                        criteriaBOT.Comment = "Vulnerable versions";
+                        criteriaBOT.Operator = "OR";
+                        criteriaMID.CritersList.Add(criteriaBOT);
                     }
                     else
                     {
-                        criteriaMID.criterionsList = new List<Criterion>();
-                        criteriaMID.criterionsList.Add(criteriaBOT.criterionsList[0]);
+                        criteriaMID.CriterionsList = new List<Criterion>();
+                        criteriaMID.CriterionsList.Add(criteriaBOT.CriterionsList[0]);
                     }
-                    criteriaTOP.critersList.Add(criteriaMID);
+                    criteriaTOP.CritersList.Add(criteriaMID);
                     lastRegistryTestID++;
                     lastRegistryObjID++;
                 }
 
 
-                definition.metadata = metadata;
-                definition.criteria = criteriaTOP;
-                resultOVALXML.definitions.definitionsList.Add(definition);
-                resultOVALXML.definitions.definitionsList.AddRange(from def in refInventoryDef
+                definition.Metadata = metadata;
+                definition.Criteria = criteriaTOP;
+                resultOVALXML.Definitions.DefinitionsList.Add(definition);
+                resultOVALXML.Definitions.DefinitionsList.AddRange(from def in refInventoryDef
                                                                    select def);
                 lastDefID++;
             }
@@ -169,23 +169,23 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             RegistryTest t = CreateRegistryTestInstallYear(testRawStrID + lastRegistryTestID.ToString(),
                                                                 "Check if " + nameOfProduct + " is installed",
                                                                 objectRawStrID + lastRegistryObjID.ToString());
-            if (!resultOVALXML.tests.registryTest.Contains(t))
-                resultOVALXML.tests.registryTest.Add(t);
+            if (!resultOVALXML.Tests.RegistryTest.Contains(t))
+                resultOVALXML.Tests.RegistryTest.Add(t);
                                        
 
-            resultOVALXML.objects.registryObject.Add(
+            resultOVALXML.Objects.RegistryObject.Add(
                 CreateRegistryObjectHolds(objectRawStrID + lastRegistryObjID.ToString(),
                                         "The registry holds " + nameOfProduct, stateRawStrID + lastStateID.ToString()));
-            resultOVALXML.states.registryState.Add(
+            resultOVALXML.States.RegistryState.Add(
                CreateRegistryStateInstall(stateRawStrID + lastStateID.ToString(), "State matches if " + nameOfProduct + " is installed"));
             lastStateID++;
             lastRegistryTestID++;
-            resultOVALXML.variables.localVariable.Add(
+            resultOVALXML.Variables.LocalVariable.Add(
                 CreateLocalVariableRegProdKey(variableRawStrID + lastVarID.ToString(),
                                         "Full key path of " + nameOfProduct + " from uninstall registry key",
                                         objectRawStrID + lastRegistryObjID.ToString()));
             lastRegistryObjID++;
-            resultOVALXML.objects.registryObject.Add(
+            resultOVALXML.Objects.RegistryObject.Add(
                 CreateRegistryObjectRegKey(objectRawStrID + lastRegistryObjID.ToString(),
                                         "Registry key for " + nameOfProduct,
                                         variableRawStrID + lastVarID.ToString()));
@@ -203,8 +203,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         {
 
             SetTAG set = new SetTAG();
-            set.objectReference = objectRawStrID + "88888";
-            set.filter = new Filter() { action = "include", text = filterId };
+            set.ObjectReference = objectRawStrID + "88888";
+            set.Filter = new Filter() { Action = "include", Text = filterId };
             RegistryObject registryObject = new RegistryObject(id, comment, null, null, null, null, set: set);   
 
             return registryObject;
@@ -214,7 +214,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         {
             RegistryState registryState = new RegistryState(id, comment);
 
-            registryState.value = new ValueTAG() { operation = "pattern match", text = "^Visual Studio.*2022$" } ;
+            registryState.Value = new ValueTAG() { Operation = "pattern match", Text = "^Visual Studio.*2022$" } ;
             return registryState;
         }
 
@@ -255,7 +255,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         {
             string stateref = stateRawStrID + lastStateID;
             RegistryState registryState = new RegistryState(new ValueTAG(@operator, "version", version), stateref, "1", comment + version);
-            resultOVALXML.states.registryState.Add(registryState);
+            resultOVALXML.States.RegistryState.Add(registryState);
             lastStateID++;
             return new State(stateref);
         }
@@ -267,8 +267,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             MetadataTAG metadata = new MetadataTAG();
             if (titleDescriprtion != null)
             {
-                metadata.title = titleDescriprtion;
-                metadata.description = titleDescriprtion;
+                metadata.Title = titleDescriprtion;
+                metadata.Description = titleDescriprtion;
             }
             else throw new Exception();
 
@@ -276,24 +276,24 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             {
                 Affected affected = new Affected();
                 if (platforms != null)
-                    affected.platformsList = platforms;
+                    affected.PlatformsList = platforms;
                 else
                 {
-                    affected.platformsList = platformsConst;
+                    affected.PlatformsList = platformsConst;
 
                 }
                 if (products != null)
-                    affected.productsList = products;
+                    affected.ProductsList = products;
 
-                if (family != null) affected.family = family;
-                metadata.affected = affected;
+                if (family != null) affected.Family = family;
+                metadata.Affected = affected;
             }
 
             if (cveID != null)
             {
-                metadata.referencesList = new List<Reference>();
-                metadata.referencesList.Add(new Reference() { source = "Microsoft", ref_id = cveID, ref_url = "https://msrc.microsoft.com/update-guide/vulnerability/" + cveID });
-                metadata.referencesList.Add(new Reference() { source = "CVE", ref_id = cveID, ref_url = "https://cve.mitre.org/cgi-bin/cvename.cgi?name=" + cveID });
+                metadata.ReferencesList = new List<Reference>();
+                metadata.ReferencesList.Add(new Reference() { Source = "Microsoft", RefId = cveID, RefUrl = "https://msrc.microsoft.com/update-guide/vulnerability/" + cveID });
+                metadata.ReferencesList.Add(new Reference() { Source = "CVE", RefId = cveID, RefUrl = "https://cve.mitre.org/cgi-bin/cvename.cgi?name=" + cveID });
             }
             return metadata;
         }
@@ -301,23 +301,23 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         public ExtendDefinition GenerateTagExtendDefinitionVulnerability(string comment, string def_ref)
         {
             ExtendDefinition extendDefinition = new ExtendDefinition();
-            extendDefinition.comment = comment;
-            extendDefinition.definitionRef = def_ref;
+            extendDefinition.Comment = comment;
+            extendDefinition.DefinitionRef = def_ref;
             return extendDefinition;
         }
 
         public Definition GenerateTagDefinitionInventory(int id, string productName, string productYear, string registryTestid)
         {
             Definition definition = new Definition();
-            definition.@class = "inventory";
-            definition.id = definitionRawStrID + id;
-            definition.version = "1";
+            definition.Class = "inventory";
+            definition.Id = definitionRawStrID + id;
+            definition.Version = "1";
             //metadata
             MetadataTAG metadata = GenerateTagMetadataInventorySample(productName, productYear);
-            definition.metadata = metadata;
-            definition.criteria = new Criteria();
-            definition.criteria.criterionsList = new List<Criterion>();
-            definition.criteria.criterionsList.Add(new Criterion(testRawStrID + registryTestid, "Check if " + productName + " is installed"));
+            definition.Metadata = metadata;
+            definition.Criteria = new Criteria();
+            definition.Criteria.CriterionsList = new List<Criterion>();
+            definition.Criteria.CriterionsList.Add(new Criterion(testRawStrID + registryTestid, "Check if " + productName + " is installed"));
             return definition;
         }
 
@@ -332,16 +332,16 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         {
             //metadata
             MetadataTAG metadata = new MetadataTAG();
-            metadata.title = productName + " is installed";
-            metadata.description = productName + " is installed";
-            metadata.affected = new Affected();
-            metadata.affected.family = "windows";
-            metadata.affected.platformsList = (from item in platformsConst
+            metadata.Title = productName + " is installed";
+            metadata.Description = productName + " is installed";
+            metadata.Affected = new Affected();
+            metadata.Affected.Family = "windows";
+            metadata.Affected.PlatformsList = (from item in platformsConst
                                                select item).ToList();
-            metadata.affected.productsList = new List<string>();
-            metadata.affected.productsList.Add(productName);
-            metadata.referencesList = new List<Reference>();
-            metadata.referencesList.Add(new Reference() { source = "CPE", ref_id = "cpe:/a:microsoft:visual_studio:" + productYear });
+            metadata.Affected.ProductsList = new List<string>();
+            metadata.Affected.ProductsList.Add(productName);
+            metadata.ReferencesList = new List<Reference>();
+            metadata.ReferencesList.Add(new Reference() { Source = "CPE", RefId = "cpe:/a:microsoft:visual_studio:" + productYear });
             return metadata;
         }
 
@@ -366,7 +366,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         private RegistryObject CreateUninstallRegistryObject()
         {
             RegistryObject registryObject = new RegistryObject(objectRawStrID + "88888", null, new Behaviors("32_bit"), "HKEY_LOCAL_MACHINE",
-                new KeyTAG() { operation = "pattern match", text = @"^Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\.*$" }, "DisplayName");
+                new KeyTAG() { Operation = "pattern match", Text = @"^Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\.*$" }, "DisplayName");
             return registryObject;
         }
 

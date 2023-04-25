@@ -12,10 +12,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "var_ref")]
-		public string varRef { get; set; }
+		public string? VarRef { get; set; }
 
 		[XmlAttribute(AttributeName = "var_check")]
-		public string varCheck { get; set; }
+		public string? VarCheck { get; set; }
 	}
 
 	[XmlRoot(ElementName = "file_object")]
@@ -23,25 +23,25 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "path")]
-		public PathTAG path { get; set; }
+		public PathTAG? Path { get; set; }
 
 		[XmlElement(ElementName = "filename")]
-		public string filename { get; set; }
+		public string? Filename { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
-		public string xmlns { get; set; }
+		public string Xmlns { get; set; }
 
 		[XmlAttribute(AttributeName = "id")]
-		public string id { get; set; }
+		public string Id { get; set; }
 
 		[XmlAttribute(AttributeName = "version")]
-		public string version { get; set; }
+		public string Version { get; set; }
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string Comment { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
 	}
 
 	[XmlRoot(ElementName = "filter")]
@@ -49,10 +49,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "action")]
-		public string action { get; set; }
+		public string Action { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+        public string Text { get; set; }
 	}
 
 	[XmlRoot(ElementName = "set")]
@@ -60,16 +60,16 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "object_reference")]
-		public string objectReference { get; set; }
+		public string ObjectReference { get; set; }
 
 		[XmlElement(ElementName = "filter")]
-		public Filter filter { get; set; }
+		public Filter Filter { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
-		public string xmlns { get; set; }
+		public string Xmlns { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
 	}
 
 	[XmlRoot(ElementName = "registry_object")]
@@ -77,37 +77,37 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "set", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5")]
-		public SetTAG set { get; set; }
+		public SetTAG Set { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
-		public string xmlns { get; set; }
+		public string Xmlns { get; set; }
 
 		[XmlAttribute(AttributeName = "ns1")]
-		public string ns1 { get; set; }
+		public string Ns1 { get; set; }
 
 		[XmlAttribute(AttributeName = "id")]
-		public string id { get; set; }
+		public string Id { get; set; }
 
 		[XmlAttribute(AttributeName = "version")]
-		public string version { get; set; }
+		public string Version { get; set; }
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string Comment { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
 
 		[XmlElement(ElementName = "behaviors")]
-		public Behaviors behaviors { get; set; }
+		public Behaviors Behaviors { get; set; }
 
 		[XmlElement(ElementName = "hive")]
-		public string hive { get; set; }
+		public string Hive { get; set; }
 
 		[XmlElement(ElementName = "key")]
-		public KeyTAG key { get; set; }
+		public KeyTAG Key { get; set; }
 
 		[XmlElement(ElementName = "name")]
-		public string name { get; set; }
+		public string Name { get; set; }
 
         public RegistryObject()
         {
@@ -116,17 +116,17 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
         public RegistryObject(string id, string comment, Behaviors? behaviors, string? hive, KeyTAG key, string name, string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", string version = "1", SetTAG? set = null, string? text = null)
         {
-            this.xmlns = xmlns;
-            this.id = id;
-            this.version = version;
-            this.comment = comment;
-			if (text != null) this.text = text;
-			if (hive != null) this.hive = hive;
-            this.name = name;
+            this.Xmlns = xmlns;
+            this.Id = id;
+            this.Version = version;
+            this.Comment = comment;
+			if (text != null) this.Text = text;
+			if (hive != null) this.Hive = hive;
+            this.Name = name;
 
-            this.key = key;
-			if (behaviors != null) this.behaviors = behaviors;
-            if (set != null) this.set = set;
+            this.Key = key;
+			if (behaviors != null) this.Behaviors = behaviors;
+            if (set != null) this.Set = set;
         }
     }
 
@@ -135,14 +135,14 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "windows_view")]
-		public string windowsView { get; set; }
+		public string WindowsView { get; set; }
         public Behaviors()
         {
 
         }
         public Behaviors(string windowsView)
         {
-            this.windowsView = windowsView;
+            this.WindowsView = windowsView;
         }
     }
 
@@ -151,16 +151,16 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "var_ref")]
-		public string varRef { get; set; }
+		public string VarRef { get; set; }
 
 		[XmlAttribute(AttributeName = "var_check")]
-		public string varCheck { get; set; }
+		public string VarCheck { get; set; }
 
 		[XmlAttribute(AttributeName = "operation")]
-		public string operation { get; set; }
+		public string Operation { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
 
         public KeyTAG()
         {
@@ -169,8 +169,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		public KeyTAG(string varRef, string varCheck)
         {
-            this.varRef = varRef;
-            this.varCheck = varCheck;
+            this.VarRef = varRef;
+            this.VarCheck = varCheck;
         }
     }
 
@@ -179,10 +179,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "file_object")]
-		public List<FileObject> fileObject { get; set; }
+		public List<FileObject> FileObject { get; set; }
 
 		[XmlElement(ElementName = "registry_object", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
-		public List<RegistryObject> registryObject { get; set; }
+		public List<RegistryObject> RegistryObject { get; set; }
 	}
 
 

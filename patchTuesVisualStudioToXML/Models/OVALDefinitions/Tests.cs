@@ -12,14 +12,14 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "object_ref")]
-		public string objectRef { get; set; }
+		public string ObjectRef { get; set; }
         public ObjectTAG()
         {
 
         }
         public ObjectTAG(string objectRef)
         {
-            this.objectRef = objectRef;
+            this.ObjectRef = objectRef;
         }
     }
 
@@ -28,14 +28,14 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "state_ref")]
-		public string stateRef { get; set; }
+		public string StateRef { get; set; }
         public State()
         {
 
         }
 		public State(string stateRef)
         {
-            this.stateRef = stateRef;
+            this.StateRef = stateRef;
         }
     }
 
@@ -44,28 +44,28 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "object")]
-		public ObjectTAG objectTag { get; set; }
+		public ObjectTAG ObjectTag { get; set; }
 
 		[XmlElement(ElementName = "state")]
-		public List<State> states { get; set; }
+		public List<State> States { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
-		public string xmlns { get; set; }
+		public string Xmlns { get; set; }
 
 		[XmlAttribute(AttributeName = "id")]
-		public string id { get; set; }
+		public string Id { get; set; }
 
 		[XmlAttribute(AttributeName = "version")]
-		public string version { get; set; }
+		public string Version { get; set; }
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string Comment { get; set; }
 
 		[XmlAttribute(AttributeName = "check_existence")]
-		public string checkExistence { get; set; }
+		public string CheckExistence { get; set; }
 
 		[XmlAttribute(AttributeName = "check")]
-		public string check { get; set; }
+		public string Check { get; set; }
         
 		public RegistryTest()
         {
@@ -73,15 +73,15 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
         }
 		public RegistryTest(string id, string comment, List<State> states, ObjectTAG objectRef, string checkExistence = "at_least_one_exists", string check = "all", string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", string version = "1")
         {
-			this.id = id;
-			this.xmlns = xmlns;
-			this.comment = comment;
-			this.version = version;
-			this.checkExistence = checkExistence;
-			this.check = check;
+			this.Id = id;
+			this.Xmlns = xmlns;
+			this.Comment = comment;
+			this.Version = version;
+			this.CheckExistence = checkExistence;
+			this.Check = check;
 
-			this.states = states;
-			this.objectTag = objectRef;
+			this.States = states;
+			this.ObjectTag = objectRef;
 		}
 	}
 
@@ -90,28 +90,30 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "object")]
-		public ObjectTAG @object { get; set; }
+		public ObjectTAG Object { get; set; }
 
 		[XmlElement(ElementName = "state")]
-		public List<State> state { get; set; }
+		public List<State> State { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
-		public string xmlns { get; set; }
+		public string Xmlns { get; set; }
 
 		[XmlAttribute(AttributeName = "id")]
-		public string id { get; set; }
+		public string Id { get; set; }
 
 		[XmlAttribute(AttributeName = "version")]
-		public string version { get; set; }
+		public string Version { get; set; }
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string Comment { get; set; }
 
 		[XmlAttribute(AttributeName = "check_existence")]
-		public string checkExistence { get; set; }
+
+		public string CheckExistence { get; set; }
 
 		[XmlAttribute(AttributeName = "check")]
-		public string check { get; set; }
+		public string Check { get; set; }
+
 	}
 
 	[XmlRoot(ElementName = "tests")]
@@ -119,10 +121,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "registry_test", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
-		public List<RegistryTest> registryTest { get; set; }
+		public List<RegistryTest> RegistryTest { get; set; }
 
 		[XmlElement(ElementName = "file_test", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
-		public List<FileTest> fileTest { get; set; }
+		public List<FileTest> FileTest { get; set; }
 	}
 
 

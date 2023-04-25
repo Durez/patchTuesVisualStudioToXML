@@ -12,22 +12,22 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 		//TODO datatype and operation
 		[XmlAttribute(AttributeName = "operation")]
-		public string operation { get; set; }
+		public string Operation { get; set; }
 
 		[XmlAttribute(AttributeName = "datatype")]
-		public string datatype { get; set; }
+		public string Datatype { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
         public ValueTAG()
         {
 
         }
         public ValueTAG(string operation, string datatype, string text)
         {
-            this.operation = operation;
-            this.datatype = datatype;
-            this.text = text;
+            this.Operation = operation;
+            this.Datatype = datatype;
+            this.Text = text;
         }
     }
 
@@ -36,41 +36,41 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "value")]
-		public ValueTAG value { get; set; }
+		public ValueTAG Value { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
-		public string xmlns { get; set; }
+		public string Xmlns { get; set; }
 
 		[XmlAttribute(AttributeName = "id")]
-		public string id { get; set; }
+		public string Id { get; set; }
 
 		[XmlAttribute(AttributeName = "version")]
-		public string version { get; set; }
+		public string Version { get; set; }
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string Comment { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
         public RegistryState()
         {
 
         }
         public RegistryState(ValueTAG value, string id, string version, string comment, string? text = null)
         {
-            this.value = value;
-            this.id = id;
-            this.version = version;
-            this.comment = comment;
-            if (text != null) this.text = text;
+            this.Value = value;
+            this.Id = id;
+            this.Version = version;
+            this.Comment = comment;
+            if (text != null) this.Text = text;
         }
 
         public RegistryState(string id, string comment)
         {
-			this.id = id;
-			this.xmlns = xmlns;
-			this.version = "1";
-			this.comment = comment;
+			this.Id = id;
+			this.Xmlns = Xmlns;
+			this.Version = "1";
+			this.Comment = comment;
         }
     }
 
@@ -79,13 +79,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "datatype")]
-		public string datatype { get; set; }
+		public string? Datatype { get; set; }
 
 		[XmlAttribute(AttributeName = "operation")]
-		public string operation { get; set; }
+		public string Operation { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
 	}
 
 	[XmlRoot(ElementName = "file_state")]
@@ -93,22 +93,22 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "version")]
-		public List<VersionTAG> version { get; set; }
+		public List<VersionTAG> Version { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
-		public string xmlns { get; set; }
+		public string Xmlns { get; set; }
 
 		[XmlAttribute(AttributeName = "id")]
-		public string id { get; set; }
+		public string Id { get; set; }
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string Comment { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
 
 		[XmlAttribute(AttributeName = "version")]
-		public string versionATR { get; set; }
+		public string VersionATR { get; set; }
 	}
 
 	[XmlRoot(ElementName = "states")]
@@ -116,10 +116,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "registry_state", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
-		public List<RegistryState> registryState { get; set; }
+		public List<RegistryState> RegistryState { get; set; }
 
 		[XmlElement(ElementName = "file_state", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
-		public List<FileStateTAG> fileState { get; set; }
+		public List<FileStateTAG> FileState { get; set; }
         public States()
         {
 
@@ -127,8 +127,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
         public States(List<RegistryState> registryState, List<FileStateTAG> fileState)
         {
-            this.registryState = registryState;
-            this.fileState = fileState;
+            this.RegistryState = registryState;
+            this.FileState = fileState;
         }
     }
 

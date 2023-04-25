@@ -11,7 +11,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	public class Definitions
 	{
 		[XmlElement(ElementName = "definition")]
-		public List<Definition> definitionsList { get; set; }
+		public List<Definition> DefinitionsList { get; set; }
         public Definitions()
         {
 
@@ -23,16 +23,16 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "platform")]
-		public List<string> platformsList { get; set; }
+		public List<string>? PlatformsList { get; set; }
 
 		[XmlElement(ElementName = "product")]
-		public List<string> productsList { get; set; }
+		public List<string>? ProductsList { get; set; }
 
 		[XmlAttribute(AttributeName = "family")]
-		public string family { get; set; }
+		public string? Family { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string? Text { get; set; }
 
 	}
 
@@ -41,13 +41,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "source")]
-		public string source { get; set; }
+		public string? Source { get; set; }
 
 		[XmlAttribute(AttributeName = "ref_id")]
-		public string ref_id { get; set; }
+		public string? RefId { get; set; }
 
 		[XmlAttribute(AttributeName = "ref_url")]
-		public string ref_url { get; set; }
+		public string? RefUrl { get; set; }
 	}
 
 	[XmlRoot(ElementName = "metadata")]
@@ -55,16 +55,16 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "title")]
-		public string title { get; set; }
+		public string Title { get; set; }
 
 		[XmlElement(ElementName = "affected")]
-		public Affected affected { get; set; }
+		public Affected Affected { get; set; }
 
 		[XmlElement(ElementName = "reference")]
-		public List<Reference> referencesList { get; set; }
+		public List<Reference> ReferencesList { get; set; }
 
 		[XmlElement(ElementName = "description")]
-		public string description { get; set; }
+		public string Description { get; set; }
         public MetadataTAG()
         {
 
@@ -77,10 +77,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string? Comment { get; set; }
 
 		[XmlAttribute(AttributeName = "definition_ref")]
-		public string definitionRef { get; set; }
+		public string? DefinitionRef { get; set; }
 	}
 
 	[XmlRoot(ElementName = "criterion")]
@@ -88,10 +88,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string Comment { get; set; }
 
 		[XmlAttribute(AttributeName = "test_ref")]
-		public string testRef { get; set; }
+		public string TestRef { get; set; }
         public Criterion()
         {
 				
@@ -99,8 +99,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
         public Criterion(string id, string comment)
         {
-            this.comment = comment;
-            this.testRef = id;
+            this.Comment = comment;
+            this.TestRef = id;
         }
     }
 
@@ -109,19 +109,19 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "operator")]
-		public string @operator { get; set; }
+		public string? Operator { get; set; }
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string? Comment { get; set; }
 
 		[XmlElement(ElementName = "extend_definition")]
-		public ExtendDefinition extendDefinition { get; set; }
+		public ExtendDefinition? ExtendDefinition { get; set; }
 		[XmlElement(ElementName = "criterion")]
 
-		public List<Criterion> criterionsList { get; set; }
+		public List<Criterion>? CriterionsList { get; set; }
 
 		[XmlElement(ElementName = "criteria")]
-		public List<Criteria> critersList { get; set; }
+		public List<Criteria>? CritersList { get; set; }
 	}
 
 
@@ -130,21 +130,21 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "metadata")]
-		public MetadataTAG metadata { get; set; }
+		public MetadataTAG? Metadata { get; set; }
 
 		[XmlElement(ElementName = "criteria")]
-		public Criteria criteria { get; set; }
+		public Criteria? Criteria { get; set; }
 
 		[XmlAttribute(AttributeName = "class")]
-		public string @class { get; set; }
+		public string? Class { get; set; }
 
 		[XmlAttribute(AttributeName = "id")]
-		public string id { get; set; }
+		public string Id { get; set; }
 
 		[XmlAttribute(AttributeName = "version")]
-		public string version { get; set; }
+		public string Version { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
 	}
 }

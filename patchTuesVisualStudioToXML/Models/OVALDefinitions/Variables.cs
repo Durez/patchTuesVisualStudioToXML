@@ -12,18 +12,18 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlAttribute(AttributeName = "item_field")]
-		public string itemField { get; set; }
+		public string ItemField { get; set; }
 
 		[XmlAttribute(AttributeName = "object_ref")]
-		public string objectRef { get; set; }
+		public string ObjectRef { get; set; }
         public ObjectComponent()
         {
 
         }
         public ObjectComponent(string itemField, string objectRef)
         {
-            this.itemField = itemField;
-            this.objectRef = objectRef;
+            this.ItemField = itemField;
+            this.ObjectRef = objectRef;
         }
     }
 
@@ -32,10 +32,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "object_component")]
-		public ObjectComponent objectComponent { get; set; }
+		public ObjectComponent ObjectComponent { get; set; }
 
 		[XmlElement(ElementName = "literal_component")]
-		public string literalComponent { get; set; }
+		public string LiteralComponent { get; set; }
 	}
 
 	[XmlRoot(ElementName = "local_variable")]
@@ -43,25 +43,25 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "concat")]
-		public Concat concat { get; set; }
+		public Concat Concat { get; set; }
 
 		[XmlAttribute(AttributeName = "id")]
-		public string id { get; set; }
+		public string Id { get; set; }
 
 		[XmlAttribute(AttributeName = "version")]
-		public string version { get; set; }
+		public string Version { get; set; }
 
 		[XmlAttribute(AttributeName = "comment")]
-		public string comment { get; set; }
+		public string Comment { get; set; }
 
 		[XmlAttribute(AttributeName = "datatype")]
-		public string datatype { get; set; }
+		public string Datatype { get; set; }
 
 		[XmlText]
-		public string text { get; set; }
+		public string Text { get; set; }
 
 		[XmlElement(ElementName = "object_component")]
-		public ObjectComponent objectComponent { get; set; }
+		public ObjectComponent ObjectComponent { get; set; }
 
         public LocalVariable()
         {
@@ -69,13 +69,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
         }
         public LocalVariable( string id, string version, string comment, string datatype, ObjectComponent objectComponent, Concat? concat = null, string? text = null)
         {
-            if (concat != null) this.concat = concat;
-            this.id = id;
-            this.version = version;
-            this.comment = comment;
-            this.datatype = datatype;
-			if (text != null)  this.text = text;
-            this.objectComponent = objectComponent;
+            if (concat != null) this.Concat = concat;
+            this.Id = id;
+            this.Version = version;
+            this.Comment = comment;
+            this.Datatype = datatype;
+			if (text != null)  this.Text = text;
+            this.ObjectComponent = objectComponent;
         }
     }
 
@@ -84,7 +84,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "local_variable")]
-		public List<LocalVariable> localVariable { get; set; }
+		public List<LocalVariable> LocalVariable { get; set; }
 	}
 
 

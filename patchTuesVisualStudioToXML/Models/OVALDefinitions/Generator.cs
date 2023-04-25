@@ -12,13 +12,13 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	{
 
 		[XmlElement(ElementName = "product_name", Namespace = "http://oval.mitre.org/XMLSchema/oval-common-5")]
-		public string productName { get; set; }
+		public string ProductName { get; set; }
 
 		[XmlElement(ElementName = "schema_version", Namespace = "http://oval.mitre.org/XMLSchema/oval-common-5")]
-		public string schemaVersion { get; set; }
+		public string SchemaVersion { get; set; }
 
 		[XmlElement(ElementName = "timestamp", Namespace = "http://oval.mitre.org/XMLSchema/oval-common-5")]
-		public string timestamp { get; set; }
+		public string Timestamp { get; set; }
 
         public GeneratorTAG()
         {
@@ -26,9 +26,9 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
         }
         public GeneratorTAG(string? schemaVersion = null, string? productName = null)
         {
-            if (productName != null) this.productName = productName;
-			if (schemaVersion != null) this.schemaVersion = schemaVersion;
-            this.timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+            if (productName != null) this.ProductName = productName;
+			if (schemaVersion != null) this.SchemaVersion = schemaVersion;
+            this.Timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
 		}
     }
 }

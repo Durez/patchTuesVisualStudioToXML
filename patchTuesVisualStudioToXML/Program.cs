@@ -1,5 +1,5 @@
 ﻿using patchTuesVisualStudioToXML.GeneratorXML;
-using patchTuesVisualStudioToXML.Models.OVALDefinitions;
+using patchTuesVisualStudioToXML.GeneratorXML.models;
 using patchTuesVisualStudioToXML.Parser;
 using patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel;
 using patchTuesVisualStudioToXML.Validator;
@@ -13,7 +13,7 @@ Console.WriteLine("Attempting to validate");
 XmlSerializer serializer = new XmlSerializer(typeof(OvalDefinitions));
 void WriteOVALXMLToFile(OvalDefinitions resultdoc, string fullNameOfFile = "res.xml")
 {
-    using (Stream fs = new FileStream("Resourses/"+fullNameOfFile, FileMode.Create))
+    using (Stream fs = new FileStream("Resourses/" + fullNameOfFile, FileMode.Create))
     {
         XmlWriter writer = new XmlTextWriter(fs, Encoding.UTF8);
         var ns = new XmlSerializerNamespaces();
@@ -44,6 +44,11 @@ Cvrfdoc LoadSampleCVRF()
     }
 }
 
+
+
+
+
+
 MSrcAPIController controller = new MSrcAPIController();
 DateTime timestart = DateTime.Now;
 Console.WriteLine("Start using Microsoft API");
@@ -55,6 +60,6 @@ Console.WriteLine("Create CVRFXML Document is done. Duration: " + duration + " s
 OvalDefinitions result = new GeneratorXMLData(LoadSample()).GenerateXMLData(rawDoc);
 
 WriteOVALXMLToFile(result);
-Console.WriteLine(new Validator().ISOVALXMLValidated(fullNameOfXMLfile: "res.xml"));
+Console.WriteLine("Your OVAL XML doc is validated: ",new Validator().ISOVALXMLValidated(fullNameOfXMLfile: "res.xml"));
 
 Console.ReadLine();
