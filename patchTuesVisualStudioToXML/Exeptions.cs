@@ -11,22 +11,24 @@ namespace patchTuesVisualStudioToXML
         public MSRCStatusCodeExeption(string message) : base(string.Format("Connection error. Status code {0}", message) )
         {
         }
-        public MSRCStatusCodeExeption(string message, Exception inner)
-    : base(string.Format("Connection error. Status code {0}", message), inner)
+        public MSRCStatusCodeExeption(string argName, Exception inner)
+    : base(string.Format("Connection error. Status code {0}", argName), inner)
         {
         }
     }
     public class GeneratorValueExeption : Exception
     {
 
-        public GeneratorValueExeption(string name):base(name)
+        public GeneratorValueExeption(string argName) :base(string.Format("Empty value in {0}", argName))
         {
         }
-        public GeneratorValueExeption(string message, Exception inner)
-    : base(message, inner)
+        public GeneratorValueExeption(string argName, Exception inner)
+    : base(string.Format("Empty value in {0}", argName), inner)
         {
         }
 
     }
-    
+
+
+
 }

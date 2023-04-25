@@ -1,5 +1,5 @@
 ﻿using patchTuesVisualStudioToXML.GeneratorXML;
-using patchTuesVisualStudioToXML.GeneratorXML.models;
+using patchTuesVisualStudioToXML.Models.OVALDefinitions;
 using patchTuesVisualStudioToXML.Parser;
 using patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel;
 using patchTuesVisualStudioToXML.Validator;
@@ -10,10 +10,10 @@ using System.Xml.Serialization;
 Console.WriteLine("Attempting to validate");
 //Console.WriteLine("sample {0}", Validator.XMLISValidated() ? "did not validate" : "validated");
 
-XmlSerializer serializer = new XmlSerializer(typeof(Cvrfdoc));
-void WriteOVALXMLToFile(OvalDefinitions resultdoc, string nameOfFile = "res")
+XmlSerializer serializer = new XmlSerializer(typeof(OvalDefinitions));
+void WriteOVALXMLToFile(OvalDefinitions resultdoc, string fullNameOfFile = "res.xml")
 {
-    using (Stream fs = new FileStream(nameOfFile + ".xml", FileMode.Create))
+    using (Stream fs = new FileStream("Resourses/"+fullNameOfFile, FileMode.Create))
     {
         XmlWriter writer = new XmlTextWriter(fs, Encoding.UTF8);
         var ns = new XmlSerializerNamespaces();
@@ -28,9 +28,18 @@ void WriteOVALXMLToFile(OvalDefinitions resultdoc, string nameOfFile = "res")
 
 OvalDefinitions LoadSample()
 {
-    using (StreamReader reader = new StreamReader("Resourses/sample.xml"))
+    using (StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "/Resourses/sample.xml"))
     {
         var test = (OvalDefinitions)serializer.Deserialize(reader);
+        return test;
+    }
+}
+
+Cvrfdoc LoadSampleCVRF()
+{
+    using (StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "/Resourses/2023-Apr.xml"))
+    {
+        var test = (Cvrfdoc)serializer.Deserialize(reader);
         return test;
     }
 }
@@ -39,12 +48,13 @@ MSrcAPIController controller = new MSrcAPIController();
 DateTime timestart = DateTime.Now;
 Console.WriteLine("Start using Microsoft API");
 Cvrfdoc rawDoc = controller.GETXMLCvrfAsync(controller.GETRawCvrfURLAsync().GetAwaiter().GetResult()).GetAwaiter().GetResult();
+//Cvrfdoc rawDoc = LoadSampleCVRF();
 string duration = (DateTime.Now - timestart).TotalSeconds.ToString("0.##");
 Console.WriteLine("Create CVRFXML Document is done. Duration: " + duration + " seconds");
 
 OvalDefinitions result = new GeneratorXMLData(LoadSample()).GenerateXMLData(rawDoc);
 
-//WriteOVALXMLToFile(result, "test");
-Console.WriteLine(new Validator().ISOVALXMLValidated(fullNameOfXMLfile: "test.xml"));
+WriteOVALXMLToFile(result);
+Console.WriteLine(new Validator().ISOVALXMLValidated(fullNameOfXMLfile: "res.xml"));
 
 Console.ReadLine();

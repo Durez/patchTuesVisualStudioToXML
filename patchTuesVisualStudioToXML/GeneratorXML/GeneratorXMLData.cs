@@ -1,19 +1,13 @@
 ﻿using patchTuesVisualStudioToXML.Parser.models.cvrfXMLmodel;
 using patchTuesVisualStudioToXML.GeneratorXML.models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using System.Xml;
 
 namespace patchTuesVisualStudioToXML.GeneratorXML
 {
     public class GeneratorXMLData
     {
-        private const string schemaVersion = "5.11";
-        private const string rawIDstring = "oval:en.ovalxmlgen.win";
+        private const string schemaVersion = "5.10.1";
+        private const string rawIDstring = "oval:ru.altx-soft.win"; // "oval:en.ovalxmlgen.win";
         private const string objectRawStrID = rawIDstring + ":obj:";
         private const string definitionRawStrID = rawIDstring + ":def:";
         private const string testRawStrID = rawIDstring + ":tst:";
@@ -26,9 +20,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                         "Microsoft Windows Server 2012 R2", "Microsoft Windows Server 2016", "Microsoft Windows Server 2019"};
         private int lastDefID = 11111;
         private int lastRegistryTestID = 22222;
-        private int lastRegistryObjID = 1;
+        private int lastRegistryObjID = 111;
         private int lastDefrefID = 77777;
-        private int lastObjID = 55555;
         private int lastStateID = 33333;
         private int lastVarID = 44444;
         
@@ -66,18 +59,12 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                 //tag metadata
                 List<string> products = new List<string>();
                 //different prodID:years of versions VS
-                Dictionary<string,string> visualStudioProdIDYearPairs = new Dictionary<string, string>();
-                foreach (var branch in from branch in cvrfdoc.ProductTree.Branch.BranchsList
-                                       where branch.Name == "Developer Tools"
-                                       select branch)
+                Dictionary<string, string> visualStudioProdIDYearPairs = new Dictionary<string, string>();
+                foreach (var branch in GetBranches(cvrfdoc))
                 {
                     foreach (var productID in vulnerability.ProductStatuses.Status.ProductIDsList)
                     {
-                        foreach (var (fullProductName, indexOfYear, nameOfProduct) in from fullProductName in branch.FullProductNamesList
-                                                                                      where fullProductName.ProductID == productID
-                                                                                      let indexOfYear = fullProductName.Text.IndexOf("Microsoft Visual Studio ") + 24
-                                                                                      let nameOfProduct = "Microsoft Visual Studio " + fullProductName.Text.Substring(indexOfYear, 4)
-                                                                                      select (fullProductName, indexOfYear, nameOfProduct))
+                        foreach (var (fullProductName, indexOfYear, nameOfProduct) in GetProductsInfo(branch, productID))
                         {
                             if (!products.Contains(nameOfProduct))
                             {
@@ -87,7 +74,6 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                             break;
                         }
                     }
-
                     break;
                 }
 
@@ -109,29 +95,21 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                     //add after root definition
                     refInventoryDef.Add(GenerateTagDefinitionInventory(lastDefrefID, nameOfProduct, ProdIDYearPair.Value, lastRegistryTestID.ToString()));
                     lastDefrefID++;
-                    
+
                     CreateExtendedDefinitionHierarchyTreeYearVers(nameOfProduct);
 
 
                     Criteria criteriaBOT = new Criteria();
                     criteriaBOT.criterionsList = new List<Criterion>();
 
-                    foreach (var remediation in vulnerability.Remediations.RemediationsList)
+                    foreach (var (lowerVersion, upperVersion, comment) in GetCriterionsInfo(vulnerability, ProdIDYearPair))
                     {
-                        string lowerVersion = remediation.FixedBuild.Substring(0, remediation.FixedBuild.LastIndexOf('.'));
-                        string upperVersion = remediation.FixedBuild;
-                        if (remediation.URL.Contains(ProdIDYearPair.Value) || remediation.ProductIDList[0] == ProdIDYearPair.Key)
-                        {
-                            string comment = string.Format("Check if the version of Visual Studio is greater than or equal {0} and less than {1}", lowerVersion, upperVersion);
-                            criteriaBOT.criterionsList.Add(new Criterion(testRawStrID + lastRegistryTestID.ToString(), comment));
-                            //add test tag
-                            string objID = objectRawStrID + lastObjID.ToString();
-
-                            CreateRegistryTestForProductVers(nameOfProduct, lowerVersion, upperVersion, comment, objID);
-
-                            lastRegistryTestID++;
-                        }
+                        criteriaBOT.criterionsList.Add(new Criterion(testRawStrID + lastRegistryTestID.ToString(), comment));
+                        //add registry test tag
+                        resultOVALXML.tests.registryTest.Add(CreateRegistryTestForProductVers(testRawStrID + lastRegistryTestID.ToString(), comment, nameOfProduct, lowerVersion, upperVersion));
+                        lastRegistryTestID++;
                     }
+
                     if (criteriaBOT.criterionsList.Count > 1)
                     {
                         criteriaMID.critersList = new List<Criteria>();
@@ -145,8 +123,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                         criteriaMID.criterionsList.Add(criteriaBOT.criterionsList[0]);
                     }
                     criteriaTOP.critersList.Add(criteriaMID);
-                    lastObjID++;
-
+                    lastRegistryTestID++;
+                    lastRegistryObjID++;
                 }
 
 
@@ -156,9 +134,34 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                 resultOVALXML.definitions.definitionsList.AddRange(from def in refInventoryDef
                                                                    select def);
                 lastDefID++;
-                break;
             }
             return resultOVALXML;
+        }
+
+        private IEnumerable<(string lowerVersion, string upperVersion, string comment)> GetCriterionsInfo(Vulnerability vulnerability, KeyValuePair<string, string> ProdIDYearPair)
+        {
+            return from remediation in vulnerability.Remediations.RemediationsList
+                   let lowerVersion = remediation.FixedBuild.Substring(0, remediation.FixedBuild.LastIndexOf('.'))
+                   let upperVersion = remediation.FixedBuild
+                   where remediation.URL.Contains(ProdIDYearPair.Value) || remediation.ProductIDList[0] == ProdIDYearPair.Key
+                   let comment = string.Format("Check if the version of Visual Studio is greater than or equal {0} and less than {1}", lowerVersion, upperVersion)
+                   select (lowerVersion, upperVersion, comment);
+        }
+
+        private IEnumerable<(FullProductName fullProductName, int indexOfYear, string nameOfProduct)> GetProductsInfo(Branch branch, string productID)
+        {
+            return from fullProductName in branch.FullProductNamesList
+                   where fullProductName.ProductID == productID
+                   let indexOfYear = fullProductName.Text.IndexOf("Microsoft Visual Studio ") + 24
+                   let nameOfProduct = "Microsoft Visual Studio " + fullProductName.Text.Substring(indexOfYear, 4)
+                   select (fullProductName, indexOfYear, nameOfProduct);
+        }
+
+        private IEnumerable<Branch> GetBranches(Cvrfdoc cvrfdoc)
+        {
+            return from branch in cvrfdoc.ProductTree.Branch.BranchsList
+                   where branch.Name == "Developer Tools"
+                   select branch;
         }
 
         private void CreateExtendedDefinitionHierarchyTreeYearVers(string nameOfProduct)
@@ -174,7 +177,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
                 CreateRegistryObjectHolds(objectRawStrID + lastRegistryObjID.ToString(),
                                         "The registry holds " + nameOfProduct, stateRawStrID + lastStateID.ToString()));
             resultOVALXML.states.registryState.Add(
-               CreateRegistryStateInstall(objectRawStrID + lastRegistryObjID.ToString(), "State matches if " + nameOfProduct + "is installed"));
+               CreateRegistryStateInstall(stateRawStrID + lastStateID.ToString(), "State matches if " + nameOfProduct + " is installed"));
+            lastStateID++;
             lastRegistryTestID++;
             resultOVALXML.variables.localVariable.Add(
                 CreateLocalVariableRegProdKey(variableRawStrID + lastVarID.ToString(),
@@ -199,7 +203,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         {
 
             SetTAG set = new SetTAG();
-            set.objectReference = objectRawStrID + "99999";
+            set.objectReference = objectRawStrID + "88888";
             set.filter = new Filter() { action = "include", text = filterId };
             RegistryObject registryObject = new RegistryObject(id, comment, null, null, null, null, set: set);   
 
@@ -216,7 +220,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
 
         private LocalVariable CreateLocalVariableRegProdKey(string id, string comment, string objComponentID)
         {
-            ObjectComponent objectComponent = new ObjectComponent("key", objectRawStrID + objComponentID);
+            ObjectComponent objectComponent = new ObjectComponent("key", objComponentID);
             LocalVariable localVariable = new LocalVariable(id, "1", comment, "string", objectComponent);
             return localVariable;
         }
@@ -224,7 +228,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
         private RegistryObject CreateRegistryObjectRegKey(string id, string comment, string objComponentID)
         {
             Behaviors behaviors = new Behaviors("32_bit");
-            KeyTAG keyTAG = new KeyTAG(id, "at least one");
+            KeyTAG keyTAG = new KeyTAG(objComponentID, "at least one");
 
             RegistryObject registryObject = new RegistryObject(id, comment, behaviors, "HKEY_LOCAL_MACHINE", keyTAG, "DisplayVersion");
 
@@ -240,17 +244,17 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
             ObjectTAG objectTAG = new ObjectTAG(objectRawStrID + lastRegistryObjID.ToString());
 
             List<State> states = new List<State>();
-            states.Add(CreateStateAndRegistryStateProdVers(lowerVersion));
-            states.Add(CreateStateAndRegistryStateProdVers(upperVersion));
+            states.Add(CreateStateAndRegistryStateProdVers(lowerVersion, "greater than or equal", "State holds if the version is greater than or equal "));
+            states.Add(CreateStateAndRegistryStateProdVers(upperVersion, "less than", "State holds if the version is less than "));
 
             RegistryTest registryTest = new RegistryTest(id, comment, states, objectTAG);
             return registryTest;
         }
 
-        private State CreateStateAndRegistryStateProdVers(string version)
+        private State CreateStateAndRegistryStateProdVers(string version, string @operator, string comment)
         {
             string stateref = stateRawStrID + lastStateID;
-            RegistryState registryState = new RegistryState(new ValueTAG("less than", "version", version), "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", stateref, "1", "State holds if the version is greater than or equal " + version);
+            RegistryState registryState = new RegistryState(new ValueTAG(@operator, "version", version), stateref, "1", comment + version);
             resultOVALXML.states.registryState.Add(registryState);
             lastStateID++;
             return new State(stateref);
@@ -258,7 +262,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
 
 
 
-        public MetadataTAG GenerateTagMetadataVulnerability(string titleDescriprtion, List<string> platforms, List<string> products, string cveID, string family = "Windows")
+        public MetadataTAG GenerateTagMetadataVulnerability(string titleDescriprtion, List<string> platforms, List<string> products, string cveID, string family = "windows")
         {
             MetadataTAG metadata = new MetadataTAG();
             if (titleDescriprtion != null)
@@ -353,7 +357,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
 
             if (!VulnerabListFiltredByProj.Any())
             {
-                
+                throw new GeneratorValueExeption("VulnerabListFiltredByProj");
             }
             return VulnerabListFiltredByProj;
         }
@@ -361,8 +365,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML
 
         private RegistryObject CreateUninstallRegistryObject()
         {
-            RegistryObject registryObject = new RegistryObject(objectRawStrID + "99999", null, new Behaviors("32_bit"), "HKEY_LOCAL_MACHINE",
-                new KeyTAG() { operation = "pattern match", text = "^Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\.*$" }, "DisplayName");
+            RegistryObject registryObject = new RegistryObject(objectRawStrID + "88888", null, new Behaviors("32_bit"), "HKEY_LOCAL_MACHINE",
+                new KeyTAG() { operation = "pattern match", text = @"^Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\.*$" }, "DisplayName");
             return registryObject;
         }
 
