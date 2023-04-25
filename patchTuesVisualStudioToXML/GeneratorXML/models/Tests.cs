@@ -118,10 +118,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	public class Tests
 	{
 
-		[XmlElement(ElementName = "registry_test")]
+		[XmlElement(ElementName = "registry_test", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
 		public List<RegistryTest> registryTest { get; set; }
 
-		[XmlElement(ElementName = "file_test")]
+		[XmlElement(ElementName = "file_test", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
 		public List<FileTest> fileTest { get; set; }
 	}
 

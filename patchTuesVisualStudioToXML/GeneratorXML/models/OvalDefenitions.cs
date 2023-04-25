@@ -11,6 +11,8 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	[XmlRoot(ElementName = "oval_definitions", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5")]
 	public class OvalDefinitions
 	{
+		[XmlElement(ElementName = "generator")]
+		public GeneratorTAG generator { get; set; }
 
 		[XmlElement(ElementName = "definitions")]
 		public Definitions definitions { get; set; }
@@ -23,9 +25,6 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
 		[XmlElement(ElementName = "states")]
 		public States states { get; set; }
-
-		[XmlElement(ElementName = "generator")]
-		public GeneratorTAG generator { get; set; }
 
 		[XmlElement(ElementName = "variables")]
 		public Variables variables { get; set; }

@@ -56,17 +56,16 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
         {
 
         }
-        public RegistryState(ValueTAG value, string xmlns, string id, string version, string comment, string? text = null)
+        public RegistryState(ValueTAG value, string id, string version, string comment, string? text = null)
         {
             this.value = value;
-            this.xmlns = xmlns;
             this.id = id;
             this.version = version;
             this.comment = comment;
             if (text != null) this.text = text;
         }
 
-        public RegistryState(string id, string comment, string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")
+        public RegistryState(string id, string comment)
         {
 			this.id = id;
 			this.xmlns = xmlns;
@@ -116,10 +115,10 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 	public class States
 	{
 
-		[XmlElement(ElementName = "registry_state")]
+		[XmlElement(ElementName = "registry_state", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
 		public List<RegistryState> registryState { get; set; }
 
-		[XmlElement(ElementName = "file_state")]
+		[XmlElement(ElementName = "file_state", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
 		public List<FileStateTAG> fileState { get; set; }
         public States()
         {

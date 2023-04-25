@@ -72,11 +72,11 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		public string text { get; set; }
 	}
 
-	[XmlRoot(ElementName = "registry_object", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
+	[XmlRoot(ElementName = "registry_object")]
 	public class RegistryObject
 	{
 
-		[XmlElement(ElementName = "set", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
+		[XmlElement(ElementName = "set", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5")]
 		public SetTAG set { get; set; }
 
 		[XmlAttribute(AttributeName = "xmlns")]
@@ -114,10 +114,9 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 
         }
 
-        public RegistryObject(string id, string comment, Behaviors? behaviors, string? hive, KeyTAG key, string name, string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", string namespace1 = "http://oval.mitre.org/XMLSchema/oval-definitions-5", string version = "1", SetTAG? set = null, string? text = null)
+        public RegistryObject(string id, string comment, Behaviors? behaviors, string? hive, KeyTAG key, string name, string xmlns = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows", string version = "1", SetTAG? set = null, string? text = null)
         {
             this.xmlns = xmlns;
-            this.ns1 = namespace1;
             this.id = id;
             this.version = version;
             this.comment = comment;
@@ -182,7 +181,7 @@ namespace patchTuesVisualStudioToXML.GeneratorXML.models
 		[XmlElement(ElementName = "file_object")]
 		public List<FileObject> fileObject { get; set; }
 
-		[XmlElement(ElementName = "registry_object")]
+		[XmlElement(ElementName = "registry_object", Namespace = "http://oval.mitre.org/XMLSchema/oval-definitions-5#windows")]
 		public List<RegistryObject> registryObject { get; set; }
 	}
 
