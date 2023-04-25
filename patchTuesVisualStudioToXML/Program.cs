@@ -1,4 +1,5 @@
-﻿using patchTuesVisualStudioToXML.DAL;
+﻿using patchTuesVisualStudioToXML;
+using patchTuesVisualStudioToXML.DAL;
 using patchTuesVisualStudioToXML.DAL.Entities;
 using patchTuesVisualStudioToXML.GeneratorXML;
 using patchTuesVisualStudioToXML.GeneratorXML.models;
@@ -45,13 +46,14 @@ Console.WriteLine("Create CVRFXML Document is done. Duration: " + duration + " s
 
 
 OvalDefinitions result = new GeneratorXMLData(true).GenerateXMLData(rawDoc);
+new Extentions().WriteOVALXMLToFile(result);
 
-string res = ToStrOVALXML(result); 
+string res = ToStrOVALXML(result);
 
 using (AppDBContext db = new AppDBContext())
 {
     
-    OVALXML oVALXML = new OVALXML() { Data = Encoding.Default.GetBytes("test xml"), CreationDate = DateTime.Now };
+    OVALXML oVALXML = new OVALXML() { Data = Encoding.Default.GetBytes(res), CreationDate = DateTime.Now };
     db.OVALXMLs.Add(oVALXML);
     db.SaveChanges();
 

@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace patchTuesVisualStudioToXML
 {
-    class Extentions
+    public class Extentions
     {
         private XmlSerializer serializer = new XmlSerializer(typeof(OvalDefinitions));
         Cvrfdoc LoadSampleCVRF()
@@ -21,7 +21,7 @@ namespace patchTuesVisualStudioToXML
                 return test;
             }
         }
-        void WriteOVALXMLToFile(OvalDefinitions resultdoc, string fullNameOfFile = "res.xml")
+        public void WriteOVALXMLToFile(OvalDefinitions resultdoc, string fullNameOfFile = "res.xml")
         {
             XmlSerializer serializer = new XmlSerializer(typeof(OvalDefinitions));
             using (Stream fs = new FileStream("Resourses/" + fullNameOfFile, FileMode.Create))
